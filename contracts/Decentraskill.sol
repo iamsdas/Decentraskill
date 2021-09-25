@@ -9,10 +9,11 @@ contract Decentraskill {
     mapping(address => bool) public is_company;
 
     struct company {
+        uint256 id;
+        string name;
+        address wallet_address;
         uint256[] current_employees;
         uint256[] previous_employees;
-        address wallet_address;
-        uint256 id;
     }
 
     struct certificate {
@@ -49,6 +50,7 @@ contract Decentraskill {
     struct user {
         uint256 id;
         uint256 company_id;
+        string name;
         address wallet_address;
         bool is_employed;
         bool is_manager;
@@ -74,17 +76,23 @@ contract Decentraskill {
         return memcmp(bytes(a), bytes(b));
     }
 
-    function sign_up(string calldata email, string calldata acc_type) public {
+    function sign_up(
+        string calldata email,
+        string calldata name,
+        string calldata acc_type
+    ) public {
         require(email_to_address[email] == address(0));
         email_to_address[email] = msg.sender;
 
         if (strcmp(acc_type, "user")) {
             user storage new_user = employees.push();
+            new_user.name = name;
             new_user.id = employees.length - 1;
             new_user.wallet_address = msg.sender;
             address_to_id[msg.sender] = new_user.id;
         } else {
             company storage new_company = companies.push();
+            new_company.name = name;
             new_company.id = companies.length - 1;
             new_company.wallet_address = msg.sender;
             new_company.current_employees = new uint256[](0);
@@ -104,5 +112,12 @@ contract Decentraskill {
         companies[company_id].current_employees.push(employee_id);
         employees[employee_id].is_employed = true;
         employees[employee_id].company_id = company_id;
+    }
+
+    function approve_manager(uint256 employee_id) public {
+        require(is_company[msg.sender]);
+        require(employees[employee_id].company_id == address_to_id[msg.sender]);
+        require(!(employees[employee_id].is_manager));
+        employees[employee_id].is_manager = true;
     }
 }

@@ -5,6 +5,8 @@ contract Decentraskill {
     company[] public companies;
     user[] public employees;
     mapping(string => address) public email_to_address;
+    mapping(address => uint256) public address_to_id;
+    mapping(address => bool) public is_company;
 
     struct company {
         uint256[] current_employees;
@@ -80,12 +82,27 @@ contract Decentraskill {
             user storage new_user = employees.push();
             new_user.id = employees.length - 1;
             new_user.wallet_address = msg.sender;
+            address_to_id[msg.sender] = new_user.id;
         } else {
             company storage new_company = companies.push();
             new_company.id = companies.length - 1;
             new_company.wallet_address = msg.sender;
             new_company.current_employees = new uint256[](0);
             new_company.previous_employees = new uint256[](0);
+            address_to_id[msg.sender] = new_company.id;
+            is_company[msg.sender] = true;
         }
+    }
+
+    function add_employee_to_company(uint256 employee_id, uint256 company_id)
+        public
+    {
+        require(
+            employees[address_to_id[msg.sender]].is_manager ||
+                is_company[msg.sender]
+        );
+        companies[company_id].current_employees.push(employee_id);
+        employees[employee_id].is_employed = true;
+        employees[employee_id].company_id = company_id;
     }
 }

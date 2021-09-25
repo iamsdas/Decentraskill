@@ -4,6 +4,7 @@ pragma solidity ^0.8.1;
 contract Decentraskill {
     company[] public companies;
     user[] public employees;
+
     mapping(string => address) public email_to_address;
     mapping(address => uint256) public address_to_id;
     mapping(address => bool) public is_company;
@@ -119,5 +120,10 @@ contract Decentraskill {
         require(employees[employee_id].company_id == address_to_id[msg.sender]);
         require(!(employees[employee_id].is_manager));
         employees[employee_id].is_manager = true;
+    }
+
+    function login(string calldata email) public view returns (string memory) {
+        require(msg.sender == email_to_address[email]);
+        return (is_company[msg.sender]) ? "company" : "user";
     }
 }

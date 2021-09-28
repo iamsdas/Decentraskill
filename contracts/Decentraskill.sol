@@ -4,6 +4,8 @@ pragma solidity ^0.8.1;
 contract Decentraskill {
     company[] public companies;
     user[] public employees;
+    certificate[] public certifications;
+    endorsment[] public endorsments;
 
     mapping(string => address) public email_to_address;
     mapping(address => uint256) public address_to_id;
@@ -22,13 +24,13 @@ contract Decentraskill {
         string issue_date;
         string valid_till;
         string name;
-        string id;
+        uint256 id;
         string issuer;
     }
 
     struct endorsment {
-        string endorser_id;
-        string date;
+        uint256 endorser_id;
+        uint256 date;
         string comment;
     }
 
@@ -42,10 +44,8 @@ contract Decentraskill {
     struct skill {
         string name;
         bool verified;
-        uint256 num_certificates;
-        mapping(uint256 => certificate) certifications;
-        uint256 num_endorsements;
-        mapping(uint256 => endorsment) endorsements;
+        uint256[] skill_certifications;
+        uint256[] skill_endorsements;
     }
 
     struct user {
@@ -90,6 +90,7 @@ contract Decentraskill {
             new_user.name = name;
             new_user.id = employees.length - 1;
             new_user.wallet_address = msg.sender;
+            new_user.num_skill = 0;
             address_to_id[msg.sender] = new_user.id;
         } else {
             company storage new_company = companies.push();
@@ -125,5 +126,55 @@ contract Decentraskill {
     function login(string calldata email) public view returns (string memory) {
         require(msg.sender == email_to_address[email]);
         return (is_company[msg.sender]) ? "company" : "user";
+    }
+
+    function add_certification(
+        string calldata url,
+        string calldata issue_date,
+        string calldata valid_till,
+        string calldata name,
+        string calldata issuer
+    ) public {
+        certificate storage new_certificate = certifications.push();
+        new_certificate.url = url;
+        new_certificate.issue_date = issue_date;
+        new_certificate.valid_till = valid_till;
+        new_certificate.name = name;
+        new_certificate.id = certifications.length - 1;
+        new_certificate.issuer = issuer;
+    }
+
+    function add_skill(uint256 userid, string calldata skill_name) public {
+        skill storage new_skill = employees[userid].skills[
+            ++employees[userid].num_skill
+        ];
+        new_skill.name = skill_name;
+        new_skill.verified = false;
+        new_skill.skill_certifications = new uint256[](0);
+        new_skill.skill_endorsements = new uint256[](0);
+    }
+
+    function endorse_skill(
+        uint256 user_id,
+        uint256 skill_id,
+        string calldata comment
+    ) public {
+        endorsment storage new_endorsemnt = endorsments.push();
+        new_endorsemnt.endorser_id = address_to_id[msg.sender];
+        new_endorsemnt.comment = comment;
+        new_endorsemnt.date = block.timestamp;
+        employees[user_id].skills[skill_id].skill_endorsements.push(
+            endorsments.length - 1
+        );
+        if (employees[address_to_id[msg.sender]].is_manager) {
+            if (
+                employees[address_to_id[msg.sender]].company_id ==
+                employees[user_id].company_id
+            ) {
+                employees[address_to_id[msg.sender]]
+                    .skills[skill_id]
+                    .verified = true;
+            }
+        }
     }
 }

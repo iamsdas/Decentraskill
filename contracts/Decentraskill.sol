@@ -202,5 +202,30 @@ contract Decentraskill {
         companies[company_id].requested_employees.push(experiences.length - 1);
     }
 
-    function approve_experience(uint256 exp_id, uint256 company_id) public {}
+    function approve_experience(uint256 exp_id, uint256 company_id) public {
+        require(experiences[exp_id].company_id == company_id);
+        require(
+            (is_company[msg.sender] &&
+                companies[address_to_id[msg.sender]].id == company_id) ||
+                (employees[address_to_id[msg.sender]].is_manager &&
+                    employees[address_to_id[msg.sender]].company_id ==
+                    company_id)
+        );
+        uint256 i;
+        experiences[exp_id].is_approved = true;
+        for (i = 0; i < companies[company_id].requested_employees.length; i++) {
+            if (companies[company_id].requested_employees[i] == exp_id) {
+                companies[company_id].requested_employees[i] = 0;
+                break;
+            }
+        }
+        for (i = 0; i < companies[company_id].current_employees.length; i++) {
+            if (companies[company_id].current_employees[i] == 0) {
+                companies[company_id].requested_employees[i] = exp_id;
+                break;
+            }
+        }
+        if (i == companies[company_id].current_employees.length)
+            companies[company_id].current_employees.push(exp_id);
+    }
 }

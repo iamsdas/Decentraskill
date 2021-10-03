@@ -6,6 +6,8 @@ contract Decentraskill {
     user[] public employees;
     certificate[] public certifications;
     endorsment[] public endorsments;
+    skill[] public skills;
+    experience[] public experiences;
 
     mapping(string => address) public email_to_address;
     mapping(address => uint256) public address_to_id;
@@ -17,6 +19,7 @@ contract Decentraskill {
         address wallet_address;
         uint256[] current_employees;
         uint256[] previous_employees;
+        uint256[] requested_employees;
     }
 
     struct certificate {
@@ -38,7 +41,8 @@ contract Decentraskill {
         string starting_date;
         string ending_date;
         bool currently_working;
-        string company_id;
+        uint256 company_id;
+        bool is_approved;
     }
 
     struct skill {
@@ -56,9 +60,17 @@ contract Decentraskill {
         bool is_employed;
         bool is_manager;
         uint256 num_skill;
-        mapping(uint256 => skill) skills;
-        uint256 num_experience;
-        mapping(uint256 => experience) work_experience;
+        uint256[] user_skills;
+        uint256[] user_work_experience;
+    }
+
+    constructor() {
+        user storage dummy_user = employees.push();
+        dummy_user.name = "dummy";
+        dummy_user.wallet_address = msg.sender;
+        dummy_user.id = 0;
+        dummy_user.user_skills = new uint256[](0);
+        dummy_user.user_work_experience = new uint256[](0);
     }
 
     function memcmp(bytes memory a, bytes memory b)
@@ -90,8 +102,9 @@ contract Decentraskill {
             new_user.name = name;
             new_user.id = employees.length - 1;
             new_user.wallet_address = msg.sender;
-            new_user.num_skill = 0;
             address_to_id[msg.sender] = new_user.id;
+            new_user.user_skills = new uint256[](0);
+            new_user.user_work_experience = new uint256[](0);
         } else {
             company storage new_company = companies.push();
             new_company.name = name;
@@ -145,9 +158,8 @@ contract Decentraskill {
     }
 
     function add_skill(uint256 userid, string calldata skill_name) public {
-        skill storage new_skill = employees[userid].skills[
-            ++employees[userid].num_skill
-        ];
+        skill storage new_skill = skills.push();
+        employees[userid].user_skills.push(skills.length - 1);
         new_skill.name = skill_name;
         new_skill.verified = false;
         new_skill.skill_certifications = new uint256[](0);
@@ -163,18 +175,32 @@ contract Decentraskill {
         new_endorsemnt.endorser_id = address_to_id[msg.sender];
         new_endorsemnt.comment = comment;
         new_endorsemnt.date = block.timestamp;
-        employees[user_id].skills[skill_id].skill_endorsements.push(
-            endorsments.length - 1
-        );
+        skills[skill_id].skill_endorsements.push(endorsments.length - 1);
         if (employees[address_to_id[msg.sender]].is_manager) {
             if (
                 employees[address_to_id[msg.sender]].company_id ==
                 employees[user_id].company_id
             ) {
-                employees[address_to_id[msg.sender]]
-                    .skills[skill_id]
-                    .verified = true;
+                skills[skill_id].verified = true;
             }
         }
     }
+
+    function add_experience(
+        uint256 user_id,
+        string calldata starting_date,
+        string calldata ending_date,
+        uint256 company_id
+    ) public {
+        experience storage new_experience = experiences.push();
+        new_experience.company_id = company_id;
+        new_experience.currently_working = false;
+        new_experience.is_approved = false;
+        new_experience.starting_date = starting_date;
+        new_experience.ending_date = ending_date;
+        employees[user_id].user_work_experience.push(experiences.length - 1);
+        companies[company_id].requested_employees.push(experiences.length - 1);
+    }
+
+    function approve_experience(uint256 exp_id, uint256 company_id) public {}
 }

@@ -1,8 +1,8 @@
 const path = require('path');
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 require('dotenv').config();
-const mnemonic = process.env.MNEMONIC;
-const url = process.env.POLYGON_MUMBAI_RPC_URL;
+// const mnemonic = process.env.MNEMONIC;
+// const url = process.env.POLYGON_MUMBAI_RPC_URL;
 
 module.exports = {
   contracts_build_directory: path.join(__dirname, 'src/abis'),

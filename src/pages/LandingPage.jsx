@@ -6,9 +6,9 @@ const LandingPage = () => {
 
   const login = async () => {
     try {
-      const accountType = await state.contract.methods
-        .login(state.email)
-        .send();
+      const accountType = await state.contract.methods.login(state.email).call({
+        from: state.account,
+      });
       console.log('account type:', accountType);
       setState({ ...state, signedIn: true });
     } catch (e) {
@@ -17,7 +17,9 @@ const LandingPage = () => {
   };
   const signUp = async () => {
     try {
-      await state.contract.methods.sign_up(state.email, 'name', 'user').send();
+      await state.contract.methods
+        .sign_up(state.email, 'name', 'user')
+        .send({ from: state.account });
       alert('signed up');
     } catch (e) {
       console.error(e);

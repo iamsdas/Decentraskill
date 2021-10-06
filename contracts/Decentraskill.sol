@@ -40,6 +40,7 @@ contract Decentraskill {
     struct experience {
         string starting_date;
         string ending_date;
+        string role;
         bool currently_working;
         uint256 company_id;
         bool is_approved;
@@ -117,18 +118,6 @@ contract Decentraskill {
         }
     }
 
-    function add_employee_to_company(uint256 employee_id, uint256 company_id)
-        public
-    {
-        require(
-            employees[address_to_id[msg.sender]].is_manager ||
-                is_company[msg.sender]
-        );
-        companies[company_id].current_employees.push(employee_id);
-        employees[employee_id].is_employed = true;
-        employees[employee_id].company_id = company_id;
-    }
-
     function approve_manager(uint256 employee_id) public {
         require(is_company[msg.sender]);
         require(employees[employee_id].company_id == address_to_id[msg.sender]);
@@ -190,6 +179,7 @@ contract Decentraskill {
         uint256 user_id,
         string calldata starting_date,
         string calldata ending_date,
+        string calldata role,
         uint256 company_id
     ) public {
         experience storage new_experience = experiences.push();
@@ -198,6 +188,7 @@ contract Decentraskill {
         new_experience.is_approved = false;
         new_experience.starting_date = starting_date;
         new_experience.ending_date = ending_date;
+        new_experience.role = role;
         employees[user_id].user_work_experience.push(experiences.length - 1);
         companies[company_id].requested_employees.push(experiences.length - 1);
     }
@@ -227,5 +218,13 @@ contract Decentraskill {
         }
         if (i == companies[company_id].current_employees.length)
             companies[company_id].current_employees.push(exp_id);
+    }
+
+    function update_wallet_address(string calldata email, address new_address)
+        public
+    {
+        require(email_to_address[email] == msg.sender);
+        email_to_address[email] = new_address;
+        address_to_id[msg.sender] = 0;
     }
 }

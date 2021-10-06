@@ -47,6 +47,7 @@ contract Decentraskill {
     }
 
     struct skill {
+        uint256 id;
         string name;
         bool verified;
         uint256[] skill_certifications;
@@ -95,7 +96,10 @@ contract Decentraskill {
         string calldata name,
         string calldata acc_type
     ) public {
-        require(email_to_address[email] == address(0));
+        require(
+            email_to_address[email] == address(0),
+            "error: user already exists!"
+        );
         email_to_address[email] = msg.sender;
 
         if (strcmp(acc_type, "user")) {
@@ -119,14 +123,23 @@ contract Decentraskill {
     }
 
     function approve_manager(uint256 employee_id) public {
-        require(is_company[msg.sender]);
-        require(employees[employee_id].company_id == address_to_id[msg.sender]);
-        require(!(employees[employee_id].is_manager));
+        require(is_company[msg.sender], "error: sender not a company account");
+        require(
+            employees[employee_id].company_id == address_to_id[msg.sender],
+            "error: user not of the same company"
+        );
+        require(
+            !(employees[employee_id].is_manager),
+            "error: user is already a manager"
+        );
         employees[employee_id].is_manager = true;
     }
 
     function login(string calldata email) public view returns (string memory) {
-        require(msg.sender == email_to_address[email]);
+        require(
+            msg.sender == email_to_address[email],
+            "error: incorrect wallet address used for signing in"
+        );
         return (is_company[msg.sender]) ? "company" : "user";
     }
 
@@ -135,7 +148,8 @@ contract Decentraskill {
         string calldata issue_date,
         string calldata valid_till,
         string calldata name,
-        string calldata issuer
+        string calldata issuer,
+        uint256 linked_skill_id
     ) public {
         certificate storage new_certificate = certifications.push();
         new_certificate.url = url;
@@ -144,6 +158,7 @@ contract Decentraskill {
         new_certificate.name = name;
         new_certificate.id = certifications.length - 1;
         new_certificate.issuer = issuer;
+        skills[linked_skill_id].skill_certifications.push(new_certificate.id);
     }
 
     function add_skill(uint256 userid, string calldata skill_name) public {

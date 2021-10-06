@@ -33,7 +33,7 @@ contract Decentraskill {
 
     struct endorsment {
         uint256 endorser_id;
-        uint256 date;
+        string date;
         string comment;
     }
 
@@ -158,12 +158,13 @@ contract Decentraskill {
     function endorse_skill(
         uint256 user_id,
         uint256 skill_id,
+        string calldata endorsing_date,
         string calldata comment
     ) public {
         endorsment storage new_endorsemnt = endorsments.push();
         new_endorsemnt.endorser_id = address_to_id[msg.sender];
         new_endorsemnt.comment = comment;
-        new_endorsemnt.date = block.timestamp;
+        new_endorsemnt.date = endorsing_date;
         skills[skill_id].skill_endorsements.push(endorsments.length - 1);
         if (employees[address_to_id[msg.sender]].is_manager) {
             if (

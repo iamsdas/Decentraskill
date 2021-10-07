@@ -13,6 +13,11 @@ contract Decentraskill {
     mapping(address => uint256) public address_to_id;
     mapping(address => bool) public is_company;
 
+    modifier verifiedUser(uint256 user_id) {
+        require(user_id == address_to_id[msg.sender]);
+        _;
+    }
+
     struct company {
         uint256 id;
         string name;
@@ -144,13 +149,14 @@ contract Decentraskill {
     }
 
     function add_certification(
+        uint256 user_id,
         string calldata url,
         string calldata issue_date,
         string calldata valid_till,
         string calldata name,
         string calldata issuer,
         uint256 linked_skill_id
-    ) public {
+    ) public verifiedUser(user_id) {
         certificate storage new_certificate = certifications.push();
         new_certificate.url = url;
         new_certificate.issue_date = issue_date;
@@ -161,7 +167,10 @@ contract Decentraskill {
         skills[linked_skill_id].skill_certifications.push(new_certificate.id);
     }
 
-    function add_skill(uint256 userid, string calldata skill_name) public {
+    function add_skill(uint256 userid, string calldata skill_name)
+        public
+        verifiedUser(userid)
+    {
         skill storage new_skill = skills.push();
         employees[userid].user_skills.push(skills.length - 1);
         new_skill.name = skill_name;
@@ -197,7 +206,7 @@ contract Decentraskill {
         string calldata ending_date,
         string calldata role,
         uint256 company_id
-    ) public {
+    ) public verifiedUser(user_id) {
         experience storage new_experience = experiences.push();
         new_experience.company_id = company_id;
         new_experience.currently_working = false;
@@ -210,13 +219,14 @@ contract Decentraskill {
     }
 
     function approve_experience(uint256 exp_id, uint256 company_id) public {
-        require(experiences[exp_id].company_id == company_id);
         require(
             (is_company[msg.sender] &&
-                companies[address_to_id[msg.sender]].id == company_id) ||
+                companies[address_to_id[msg.sender]].id ==
+                experiences[exp_id].company_id) ||
                 (employees[address_to_id[msg.sender]].is_manager &&
                     employees[address_to_id[msg.sender]].company_id ==
-                    company_id)
+                    experiences[exp_id].company_id),
+            "error: approver should be the company account or a manager of the required company"
         );
         uint256 i;
         experiences[exp_id].is_approved = true;
@@ -239,8 +249,13 @@ contract Decentraskill {
     function update_wallet_address(string calldata email, address new_address)
         public
     {
-        require(email_to_address[email] == msg.sender);
+        require(
+            email_to_address[email] == msg.sender,
+            "error: function called from incorrect wallet address"
+        );
         email_to_address[email] = new_address;
+        uint256 id = address_to_id[msg.sender];
         address_to_id[msg.sender] = 0;
+        address_to_id[new_address] = id;
     }
 }

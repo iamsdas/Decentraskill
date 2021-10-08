@@ -1,9 +1,8 @@
 const path = require('path');
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
 require('dotenv').config();
-// const mnemonic = process.env.MNEMONIC;
-// const url = process.env.POLYGON_MUMBAI_RPC_URL;
-
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const url = process.env.REACT_APP_POLYGON_MUMBAI_RPC_URL;
+const mnemonic = process.env.REACT_APP_MNEMONIC;
 module.exports = {
   contracts_build_directory: path.join(__dirname, 'src/abis'),
   networks: {
@@ -17,15 +16,14 @@ module.exports = {
       port: 7545,
       network_id: '',
     },
-    // matic: {
-    //   provider: () => new HDWalletProvider(mnemonic, url),
-    //   network_id: 80001,
-    //   confirmations: 2,
-    //   timeoutBlocks: 200,
-    //   skipDryRun: true,
-    // },
+    matic: {
+      provider: () => new HDWalletProvider(mnemonic, url),
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+    },
   },
-
   compilers: {
     solc: {
       version: '0.8.1',
@@ -35,8 +33,5 @@ module.exports = {
       },
     },
   },
-  // api_keys: {
-  //   polygonscan: process.env.POLYGONSCAN_API_KEY,
-  // },
   plugins: ['truffle-plugin-verify'],
 };

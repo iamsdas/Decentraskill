@@ -140,7 +140,7 @@ contract Decentraskill {
         employees[employee_id].is_manager = true;
     }
 
-    function login(string calldata email) public view returns (string memory) {
+    function login(string memory email) public view returns (string memory) {
         require(
             msg.sender == email_to_address[email],
             "error: incorrect wallet address used for signing in"
@@ -150,7 +150,7 @@ contract Decentraskill {
 
     function add_certification(
         uint256 user_id,
-        string calldata url,
+        string memory url,
         string calldata issue_date,
         string calldata valid_till,
         string calldata name,

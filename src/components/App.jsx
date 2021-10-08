@@ -12,6 +12,7 @@ const App = () => {
     contract: null,
     email: '',
     account: '',
+    accountId: '',
     signedIn: false,
     loaded: false,
   });
@@ -25,11 +26,13 @@ const App = () => {
         const netId = await web3.eth.net.getId();
         const address = SmartContract.networks[netId].address;
         const contract = new web3.eth.Contract(SmartContract.abi, address);
+        const accountId = await contract.methods.address_to_id(account).call();
         setState({
           ...state,
           web3,
           account,
           contract,
+          accountId,
           loaded: true,
         });
         console.log('setup complete');

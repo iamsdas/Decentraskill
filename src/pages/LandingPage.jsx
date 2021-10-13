@@ -1,5 +1,7 @@
 import { useContext } from 'react';
 import { Web3Context } from '../utils/web3';
+import Navbar from '../components/Navbar';
+import Banner from '../components/Banner';
 
 const LandingPage = () => {
   const { state, setState } = useContext(Web3Context);
@@ -104,7 +106,7 @@ const LandingPage = () => {
     try {
       await state.contract.methods.endorse_skill(
         empId,
-        skillName,
+        skillId,
         `${date.getMonth()} ${date.getFullYear()}`,
         comment
       );
@@ -114,9 +116,9 @@ const LandingPage = () => {
   };
 
   return (
-    <div>
-      <button onClick={login}>login</button>
-      <button onClick={signUp}>sign up</button>
+    <div className='bg-white h-full'>
+      <Navbar login={login} connected={0} />
+      <Banner />
     </div>
   );
 };

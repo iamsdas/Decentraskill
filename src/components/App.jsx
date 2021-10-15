@@ -1,23 +1,22 @@
-import React, { Suspense, lazy, useCallback, useState, useEffect } from 'react';
-import { Web3Context } from '../utils/web3.js';
-import SmartContract from '../abis/Decentraskill.json';
+import React, {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useReducer,
+} from 'react';
+
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Web3 from 'web3';
+import { StoreContext, Reducer, initialState } from '../utils/store.js';
+import SmartContract from '../abis/Decentraskill.json';
 
 const LandingPage = lazy(() => import('../pages/LandingPage.jsx'));
 const Company_Dashboard = lazy(() => import('../pages/Company_Dashboard'));
 const User_Dashboard = lazy(() => import('../pages/User_Dashboard'));
 
 const App = () => {
-  const [state, setState] = useState({
-    web3: null,
-    contract: null,
-    email: '',
-    account: '',
-    accountId: '',
-    signedIn: false,
-    loaded: false,
-  });
+  const [state, dispatch] = useReducer(Reducer, initialState);
 
   const initWeb3 = useCallback(async () => {
     if (window.ethereum) {
@@ -29,15 +28,15 @@ const App = () => {
         const address = SmartContract.networks[netId].address;
         const contract = new web3.eth.Contract(SmartContract.abi, address);
         const accountId = await contract.methods.address_to_id(account).call();
-        setState({
-          ...state,
-          web3,
-          account,
-          contract,
-          accountId,
-          loaded: true,
+        dispatch({
+          type: 'init_web3',
+          payload: {
+            web3,
+            account,
+            contract,
+            accountId,
+          },
         });
-        console.log('setup complete');
       } catch (e) {
         alert(e);
       }
@@ -51,7 +50,7 @@ const App = () => {
   }, [initWeb3]);
 
   return (
-    <Web3Context.Provider value={{ state, setState }}>
+    <StoreContext.Provider value={{ state, dispatch }}>
       <Router>
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
@@ -61,7 +60,7 @@ const App = () => {
           </Switch>
         </Suspense>
       </Router>
-    </Web3Context.Provider>
+    </StoreContext.Provider>
   );
 };
 

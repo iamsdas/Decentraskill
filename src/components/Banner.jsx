@@ -1,7 +1,12 @@
+import { StoreContext } from '../utils/store';
+import { useContext } from 'react';
+
 function Banner() {
+  const { state } = useContext(StoreContext);
   return (
     <div className=''>
-      <h1>Banner Space</h1>
+      {/* TODO: change later */}
+      <h1>{state.account}</h1>
     </div>
   );
 }

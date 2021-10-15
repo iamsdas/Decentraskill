@@ -1,22 +1,10 @@
 import { useContext } from 'react';
-import { Web3Context } from '../utils/web3';
+import { StoreContext } from '../utils/store';
 import Navbar from '../components/Navbar';
 import Banner from '../components/Banner';
 
 const LandingPage = () => {
-  const { state, setState } = useContext(Web3Context);
-
-  const login = async () => {
-    try {
-      const accountType = await state.contract.methods.login(state.email).call({
-        from: state.account,
-      });
-      console.log('account type:', accountType);
-      setState({ ...state, signedIn: true });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const { state } = useContext(StoreContext);
 
   const signUp = async () => {
     try {
@@ -117,7 +105,7 @@ const LandingPage = () => {
 
   return (
     <div className='bg-white h-full'>
-      <Navbar login={login} connected={0} />
+      <Navbar login={() => {}} connected={0} />
       <Banner />
     </div>
   );

@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { StoreContext } from '../utils/store';
 function Skills() {
-  const skill = [
+  const skills = [
     { id: 1, name: 'Udemy' },
     { id: 2, name: 'Bootcamp' },
     { id: 3, name: 'Web bootcamp' },
   ];
 
   const [active, setActive] = useState(1);
+  const { state, dispatch } = useContext(StoreContext);
+
+  useEffect(() => {}, []);
 
   const ActiveItem = () => {
     switch (active) {
@@ -24,7 +28,7 @@ function Skills() {
   return (
     <div className='flex mx-auto p-0  h-full'>
       <sidebar className=' w-1/4 bg-gray-800 mx-0 sm:px-6 lg:px-8  float-left text-gray-300'>
-        {skill.map((item, i) => {
+        {skills.map((item, i) => {
           return (
             <div
               key={i}

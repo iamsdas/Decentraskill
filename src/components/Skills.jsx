@@ -1,16 +1,31 @@
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from '../utils/store';
 function Skills() {
-  const skills = [
-    { id: 1, name: 'Udemy' },
-    { id: 2, name: 'Bootcamp' },
-    { id: 3, name: 'Web bootcamp' },
-  ];
-
+  const { state } = useContext(StoreContext);
   const [active, setActive] = useState(1);
-  const { state, dispatch } = useContext(StoreContext);
+  const [skills, setSkills] = useState([]);
 
-  useEffect(() => {}, []);
+  const addSkill = async (skillName) => {
+    try {
+      await state.contract.methods.add_skill(state.accountId, skillName);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    if (state.loaded) {
+      state.contract.methods
+        .skills_of_user(state.accountId)
+        .call()
+        .then((skillIdx) => {
+          skillIdx.forEach(async (id) => {
+            const skill = await state.contract.skills(id).call();
+            setSkills((skls) => ({ ...skls, skill }));
+          });
+        });
+    }
+  }, [state]);
 
   const ActiveItem = () => {
     switch (active) {

@@ -4,7 +4,7 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import DS_LOGO from '../assets/DS_LOGO.png';
 
-function Navbar({ login, signup, connected }) {
+function Navbar({ signup, connected }) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
   }

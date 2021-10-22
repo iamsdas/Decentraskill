@@ -6,7 +6,7 @@ function Banner() {
   return (
     <div className=''>
       {/* TODO: change later */}
-      <h1>{state.account}</h1>
+      <h1>{state.account || 'loading'}</h1>
     </div>
   );
 }

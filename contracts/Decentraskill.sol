@@ -258,4 +258,44 @@ contract Decentraskill {
         address_to_id[msg.sender] = 0;
         address_to_id[new_address] = id;
     }
+
+    function skills_of_user(uint256 id) public view returns (uint256[] memory) {
+        return employees[id].user_skills;
+    }
+
+    function exp_of_user(uint256 id) public view returns (uint256[] memory) {
+        return employees[id].user_work_experience;
+    }
+
+    function curr_emp_of_company(uint256 id)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return companies[id].current_employees;
+    }
+
+    function prev_emp_of_company(uint256 id)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return companies[id].previous_employees;
+    }
+
+    function requested_emp_of_company(uint256 id)
+        public
+        view
+        returns (uint256[] memory)
+    {
+        return companies[id].requested_employees;
+    }
+
+    function cert_of_skill(uint256 id) public view returns (uint256[] memory) {
+        return skills[id].skill_certifications;
+    }
+
+    function endrs_of_skill(uint256 id) public view returns (uint256[] memory) {
+        return skills[id].skill_endorsements;
+    }
 }

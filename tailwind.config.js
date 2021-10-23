@@ -6,6 +6,9 @@ module.exports = {
     fontFamily: {
       Open: ['Open Sans', 'sans-serif'],
     },
+    backgroundImage: {
+      design: 'url(../assets/design.png)',
+    },
   },
   variants: {
     extend: {},

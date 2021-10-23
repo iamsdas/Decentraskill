@@ -4,7 +4,7 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import DS_LOGO from '../assets/DS_LOGO.png';
 
-function Navbar({ signup, connected }) {
+function Navbar({ signup, connected, login }) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
   }
@@ -52,11 +52,18 @@ function Navbar({ signup, connected }) {
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
                       Home
                     </a>
+
+                    <button
+                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'
+                      onClick={login}>
+                      Login
+                    </button>
+
                     <Menu
                       as='div'
                       className='relative inline-block text-left onhover:bg-gray-700 '>
                       <div>
-                        <Menu.Button className='inline-flex justify-center w-full rounded-md  shadow-sm px-3 py-2 bg-gray-800 text-md font-medium text-gray-300 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500'>
+                        <Menu.Button className='inline-flex justify-center w-full rounded-md  shadow-sm px-3 py-2 bg-gray-800 text-md font-medium text-gray-300 hover:bg-gray-900 onhover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500'>
                           SignUp
                           <ChevronDownIcon
                             className='-mr-1 ml-2 h-5 w-5 mt-1.5'

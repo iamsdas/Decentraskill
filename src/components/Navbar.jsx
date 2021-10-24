@@ -34,14 +34,14 @@ function Navbar({ signup, connected, login }) {
                   <img
                     className='block lg:hidden h-8 w-auto'
                     src={DS_LOGO}
-                    alt='Decentaskill'
+                    alt='Decentraskill'
                   />
                   <img
                     className='hidden lg:block h-8 w-auto'
                     src={DS_LOGO}
                     alt='Decentraskill'
                   />
-                  <span className='font-sans text-white text-md font-extrabold rounded-md '>
+                  <span className='font-Bebas text-white text-md rounded-md tracking-widest'>
                     Decentraskill
                   </span>
                 </div>

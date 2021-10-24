@@ -35,7 +35,7 @@ function Experiance() {
 
   return (
     <div>
-      <h1>Experiance</h1>
+      <h1>Experience</h1>
       {exps.forEach((exp) => (
         <div>{exp}</div>
       ))}

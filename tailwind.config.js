@@ -1,13 +1,21 @@
 module.exports = {
   mode: 'jit',
-  purge: ['./public/**/*.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
+  purge: [
+    './src/**/*.{js,jsx,ts,tsx}',
+    './public/index.html',
+    './src/components/*.{js,jsx}',
+  ],
   darkMode: false, // or 'media' or 'class'
   theme: {
     fontFamily: {
       Open: ['Open Sans', 'sans-serif'],
+      Bebas: ['Bebas Neue', 'cursive'],
     },
     backgroundImage: {
       design: 'url(../assets/design.png)',
+    },
+    transitionProperty: {
+      width: 'width',
     },
   },
   variants: {

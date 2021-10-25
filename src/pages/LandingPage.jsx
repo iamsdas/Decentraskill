@@ -27,10 +27,15 @@ const LandingPage = () => {
     const accountType = await state.contract.methods.login(state.email).call({
       from: state.account,
     });
-    const accountId = await state.contract.methods
-      .address_to_id(state.account)
-      .call();
-    setState({ ...state, accountType, accountId });
+    try {
+      const accountId = await state.contract.methods
+        .address_to_id(state.account)
+        .call();
+      setState({ ...state, accountType, accountId });
+      console.log('logged in with id:' + accountId);
+    } catch (e) {
+      alert('account does not exist');
+    }
   }, [setState, state]);
 
   const approveEmployee = async (experienceId, companyId) => {

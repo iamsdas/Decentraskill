@@ -1,8 +1,9 @@
-import { StoreContext } from '../utils/store';
 import { useContext } from 'react';
+import { StoreContext } from '../utils/store';
 import design from '../assets/design.png';
 
 function Banner() {
+  /** @type {import('../utils/store').StateType} */
   const { state } = useContext(StoreContext);
   return (
     <div className='font-Open text-center h-screen p-5 left-10 right-10  bg-cover bg-no-repeat  mx-auto pt-2 '>

@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import Banner from '../components/Banner';
 
 const LandingPage = () => {
+  /** @type {import('../utils/store').ContextType} */
   const { state, setState } = useContext(StoreContext);
 
   const signUp = useCallback(async () => {

@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from '../utils/store';
+
 function Skills() {
+  /** @type {import('../utils/store').StateType} */
   const { state } = useContext(StoreContext);
   const [active, setActive] = useState(1);
   const [skills, setSkills] = useState([]);

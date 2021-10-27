@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { StoreContext } from '../utils/store';
 
 function Experiance() {
+  /** @type {import('../utils/store').StateType} */
   const { state } = useContext(StoreContext);
   const [exps, setExps] = useState([]);
 

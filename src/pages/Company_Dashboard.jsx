@@ -1,5 +1,4 @@
 import Navbar from '../components/Navbar';
-import Skills from '../components/Skills';
 import Requests from '../components/Requests';
 import EditTeam from '../components/EditTeam';
 import { useState } from 'react';

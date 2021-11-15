@@ -16,11 +16,11 @@ function Navbar({ signup, connected, login }) {
     <Disclosure as='nav' className='sticky top-0 bg-gray-800'>
       {({ open }) => (
         <>
-          <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
-            <div className='relative flex items-center justify-between h-16'>
-              <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
+          <div className='max-w-9xl mx-1'>
+            <div className='relative flex items-center  h-16'>
+              <div className='absolute top-0 right-0 justify-items-end pt-3 flex items-center sm:hidden'>
                 {/* Mobile menu button*/}
-                <Disclosure.Button className='inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'>
+                <Disclosure.Button className='inline-flex items-center  p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'>
                   <span className='sr-only'>Open main menu</span>
                   {open ? (
                     <XIcon className='block h-6 w-6' aria-hidden='true' />
@@ -29,10 +29,10 @@ function Navbar({ signup, connected, login }) {
                   )}
                 </Disclosure.Button>
               </div>
-              <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-center'>
-                <div className='flex-shrink-0 flex items-center'>
+              <div className='flex-1 flex items-center justify-start sm:items-stretch sm:justify-start'>
+                <div className='flex-shrink-0 flex  items-center'>
                   <img
-                    className='block lg:hidden h-8 w-auto'
+                    className='block lg:hidden h-8 w-auto '
                     src={DS_LOGO}
                     alt='Decentraskill'
                   />
@@ -45,7 +45,7 @@ function Navbar({ signup, connected, login }) {
                     Decentraskill
                   </span>
                 </div>
-                <div className='hidden sm:block sm:ml-6'>
+                <div className='hidden sm:block mr-0 pt-3 absolute top-0 right-0 items-center justify-end'>
                   <div className='flex space-x-4'>
                     <a
                       href='/'

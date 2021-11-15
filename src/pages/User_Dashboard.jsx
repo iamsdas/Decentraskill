@@ -7,7 +7,7 @@ import { useState } from 'react';
 function User_Dashboard() {
   const items = [
     { id: 1, name: 'Skills' },
-    { id: 2, name: 'Experiance' },
+    { id: 2, name: 'Work Experiance' },
     { id: 3, name: 'Certificates' },
   ];
 

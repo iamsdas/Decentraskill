@@ -1,11 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
 import { StoreContext } from '../utils/store';
+import ReCAPTCHA from 'react-google-recaptcha';
 import Comment from './comment.jsx';
 
 function Skills() {
   const [showModal, setShowModal] = useState(false);
   const [checkModal, setCheckModal] = useState(false);
   const [newSkill, setNewSkill] = useState();
+  const [verified, setVerified] = useState(false);
 
   /** @type {import('../utils/store').StateType} */
   const { state } = useContext(StoreContext);
@@ -78,6 +80,23 @@ function Skills() {
     }
   };
 
+  function Check(value) {
+    console.log('Captcha value: ' + value);
+    setVerified(true);
+  }
+
+  function deleteSkill() {
+    if (verified) {
+      // var temp = skills;
+      // const filteredSkills = temp.filter((skill) => skill.id !== active - 1);
+      // console.log(filteredSkills);
+      setCheckModal(false);
+      setVerified(false);
+    } else {
+      alert('Please check the captcha');
+    }
+  }
+
   return (
     <div className='flex mx-auto p-0  h-full'>
       <sidebar className=' w-1/4 bg-gray-800 mx-0 sm:px-6 lg:px-8  float-left text-gray-300'>
@@ -126,6 +145,10 @@ function Skills() {
                         <div className='relative p-6 flex-auto'>
                           <p className='my-4 text-black text-lg leading-relaxed'>
                             <h1>Capcha</h1>
+                            <ReCAPTCHA
+                              sitekey='6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+                              onChange={Check}
+                            />
                           </p>
                         </div>
                         {/*footer*/}
@@ -138,8 +161,9 @@ function Skills() {
                           </button>
                           <button
                             className='bg-emerald-500 text-black active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-                            type='button'>
-                            Check
+                            type='button'
+                            onClick={deleteSkill}>
+                            Yes
                           </button>
                         </div>
                       </div>

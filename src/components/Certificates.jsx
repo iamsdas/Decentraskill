@@ -117,9 +117,9 @@ function Certificates() {
                 <div className='border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none'>
                   {/*header*/}
                   <div className='flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t'>
-                    <h3 className='text-3xl font-semibold text-black'>
+                    <h4 className='text-3xl font-semibold text-black text-center'>
                       Add New Certificate
-                    </h3>
+                    </h4>
                     <button
                       className='p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none'
                       onClick={() => setShowModal(false)}>
@@ -130,59 +130,67 @@ function Certificates() {
                   </div>
                   {/*body*/}
                   <div className='relative p-6 flex-auto my-4 text-black text-lg leading-relaxed'>
-                    <label>Certificate Name: </label>
-                    <input
-                      placeholder='Eg:Web dev bootcamp'
-                      className='border-solid border-black px-2'
-                      type='text'
-                      required
-                      value={newName}
-                      onChange={(e) => {
-                        setNewName(e.target.value);
-                      }}></input>
-                    <label>Issue Date: </label>
-                    <DatePicker
-                      selected={newIssueDate}
-                      onChange={(date) => setNewIssueDate(date)}
-                    />
-                    <label>Issuer: </label>
-                    <select
-                      value={newIssuer}
-                      onChange={(e) => {
-                        setNewIssuer(e.target.value);
-                      }}>
-                      <option value='udemy'>Udemy</option>
-                      <option value='Coursera'>Coursera</option>
-                      <option selected value=''>
-                        NPTEL
-                      </option>
-                      <option value='Others'>Others</option>
-                    </select>
-                    <label>Validity:</label>
-                    <select
-                      value={newValidity}
-                      onChange={(e) => {
-                        setNewValidity(e.target.value);
-                      }}>
-                      <option value='Less then 3 Years'>
-                        Less then 3 Years
-                      </option>
-                      <option value='3 - 5 Years'>3 - 5 Years</option>
-                      <option selected value='5 - 10 Years'>
-                        5 - 10 Years
-                      </option>
-                      <option value='10+ Years'>10+ Years</option>
-                    </select>
-
-                    <label>Link:</label>
-                    <input
-                      placeholder='Eg:udemy.com/hardikag17/webdbootcamp007'
-                      required
-                      className='border-solid border-black px-2'
-                      value={newLink}
-                      onChange={(e) => {
-                        setNewLink(e.target.value);
-                      }}></input>
+                    <form className='mx-auto'>
+                      <label>Certificate Name: </label>
+                      <input
+                        placeholder='Eg:Web dev bootcamp'
+                        className='border-solid border-black px-2'
+                        type='text'
+                        required
+                        value={newName}
+                        onChange={(e) => {
+                          setNewName(e.target.value);
+                        }}></input>
+                      <br />
+                      <div>
+                        <label>Issue Date: </label>
+                        <DatePicker
+                          selected={newIssueDate}
+                          onChange={(date) => setNewIssueDate(date)}
+                        />
+                      </div>
+                      <br />
+                      <label>Issuer: </label>
+                      <select
+                        value={newIssuer}
+                        onChange={(e) => {
+                          setNewIssuer(e.target.value);
+                        }}>
+                        <option value='udemy'>Udemy</option>
+                        <option value='Coursera'>Coursera</option>
+                        <option selected value=''>
+                          NPTEL
+                        </option>
+                        <option value='Others'>Others</option>
+                      </select>
+                      <br />
+                      <label>Validity:</label>
+                      <select
+                        value={newValidity}
+                        onChange={(e) => {
+                          setNewValidity(e.target.value);
+                        }}>
+                        <option value='Less then 3 Years'>
+                          Less then 3 Years
+                        </option>
+                        <option value='3 - 5 Years'>3 - 5 Years</option>
+                        <option selected value='5 - 10 Years'>
+                          5 - 10 Years
+                        </option>
+                        <option value='10+ Years'>10+ Years</option>
+                      </select>
+                      <br />
+                      <label>Link:</label>
+                      <input
+                        placeholder='Eg:udemy.com/hardikag17/webdbootcamp007'
+                        required
+                        className='border-solid border-black px-2'
+                        value={newLink}
+                        onChange={(e) => {
+                          setNewLink(e.target.value);
+                        }}></input>
+                      <br />
+                    </form>
                   </div>
                   {/*footer*/}
                   <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>

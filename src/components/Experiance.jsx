@@ -159,8 +159,8 @@ function Experiance() {
                     </button>
                   </div>
                   {/*body*/}
-                  <div className='relative p-6 flex-auto'>
-                    <p className='my-4 text-black text-lg leading-relaxed'>
+                  <div className='relative p-6 flex-auto my-4 text-black text-lg leading-relaxed'>
+                    <form>
                       <label>Company Name:</label>
                       <input
                         placeholder='Eg:JavaScript'
@@ -169,6 +169,7 @@ function Experiance() {
                         onChange={(e) => {
                           setNewName(e.target.value);
                         }}></input>
+                      <br />
                       <label>Start Date:</label>
                       <input
                         placeholder='Eg:JavaScript'
@@ -177,6 +178,7 @@ function Experiance() {
                         onChange={(e) => {
                           setNewStartDate(e.target.value);
                         }}></input>
+
                       <label>End Date:</label>
                       <input
                         placeholder='Eg:JavaScript'
@@ -185,6 +187,7 @@ function Experiance() {
                         onChange={(e) => {
                           setNewEndDate(e.target.value);
                         }}></input>
+                      <br />
                       <label>Role:</label>
                       <input
                         placeholder='Eg:JavaScript'
@@ -193,7 +196,8 @@ function Experiance() {
                         onChange={(e) => {
                           setNewRole(e.target.value);
                         }}></input>
-                    </p>
+                      <br />
+                    </form>
                   </div>
                   {/*footer*/}
                   <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>

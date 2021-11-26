@@ -1,7 +1,8 @@
+import { useState, lazy } from 'react';
 import Navbar from '../components/Navbar';
 import Requests from '../components/Requests';
 import EditTeam from '../components/EditTeam';
-import { useState } from 'react';
+const Profile = lazy(() => import('../components/Profile'));
 
 function Company_Dashboard() {
   const items = [
@@ -50,7 +51,7 @@ function Company_Dashboard() {
         </sidebar>
         <main className='w-3/4 lg:px-8 sm:px-6 mx-auto inline-block float-right h-full '>
           <div className='border-4 border-solid border-gray-200 rounded-lg h-2/6 mx-5 mt-0 mb-1'>
-            User Profile bio
+            <Profile />
           </div>
           <div className='border-4 border-solid border-gray-200 rounded-lg h-4/6 mx-5 mt-2'>
             {ActiveItem()}

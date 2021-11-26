@@ -218,30 +218,25 @@ function Navbar({ signup, connected, login }) {
               </div>
 
               <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
-                <div className='flex-shrink-0 flex items-center'>
-                  <img
-                    className='block lg:hidden h-8 w-auto'
-                    src={DS_LOGO}
-                    alt='Decentaskill'
-                  />
-                  <img
-                    className='hidden lg:block h-8 w-auto'
-                    src={DS_LOGO}
-                    alt='Decentraskill'
-                  />
-                  <span className='font-sans text-white text-md font-extrabold rounded-md '>
-                    Dashboard
-                  </span>
-                </div>
-                <div className='hidden sm:block sm:ml-6'>
-                  <div className='flex space-x-4'>
-                    <a
-                      href='/'
-                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
-                      Home
-                    </a>
+                <a
+                  href='/'
+                  className='hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
+                  <div className='flex-shrink-0 flex  items-center'>
+                    <img
+                      className='block lg:hidden h-8 w-auto '
+                      src={DS_LOGO}
+                      alt='Decentraskill'
+                    />
+                    <img
+                      className='hidden lg:block h-8 w-auto'
+                      src={DS_LOGO}
+                      alt='Decentraskill'
+                    />
+                    <span className='font-Bebas text-white text-md rounded-md tracking-widest'>
+                      Decentraskill
+                    </span>
                   </div>
-                </div>
+                </a>
               </div>
               <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
                 <button

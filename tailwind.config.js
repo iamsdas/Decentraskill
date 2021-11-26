@@ -12,7 +12,7 @@ module.exports = {
       Bebas: ['Bebas Neue', 'cursive'],
     },
     backgroundImage: {
-      design: 'url(../assets/design.png)',
+      design: 'url(../assets/bg.png)',
     },
     transitionProperty: {
       width: 'width',

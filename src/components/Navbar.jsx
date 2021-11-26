@@ -3,8 +3,10 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import DS_LOGO from '../assets/DS_LOGO.png';
+import { useHistory } from 'react-router-dom';
 
 function Navbar({ signup, connected, login }) {
+  let history = useHistory();
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
   }
@@ -30,31 +32,30 @@ function Navbar({ signup, connected, login }) {
                 </Disclosure.Button>
               </div>
               <div className='flex-1 flex items-center justify-start sm:items-stretch sm:justify-start'>
-                <div className='flex-shrink-0 flex  items-center'>
-                  <img
-                    className='block lg:hidden h-8 w-auto '
-                    src={DS_LOGO}
-                    alt='Decentraskill'
-                  />
-                  <img
-                    className='hidden lg:block h-8 w-auto'
-                    src={DS_LOGO}
-                    alt='Decentraskill'
-                  />
-                  <span className='font-Bebas text-white text-md rounded-md tracking-widest'>
-                    Decentraskill
-                  </span>
-                </div>
+                <a
+                  href='/'
+                  className='hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
+                  <div className='flex-shrink-0 flex  items-center'>
+                    <img
+                      className='block lg:hidden h-8 w-auto '
+                      src={DS_LOGO}
+                      alt='Decentraskill'
+                    />
+                    <img
+                      className='hidden lg:block h-8 w-auto'
+                      src={DS_LOGO}
+                      alt='Decentraskill'
+                    />
+                    <span className='font-Bebas text-white text-md rounded-md tracking-widest'>
+                      Decentraskill
+                    </span>
+                  </div>
+                </a>
+
                 <div className='hidden sm:block mr-0 pt-3 absolute top-0 right-0 items-center justify-end'>
                   <div className='flex space-x-4'>
-                    <a
-                      href='/'
-                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
-                      Home
-                    </a>
-
                     <button
-                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'
+                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
                       onClick={login}>
                       Login
                     </button>
@@ -84,30 +85,44 @@ function Navbar({ signup, connected, login }) {
                           <div className='py-1'>
                             <Menu.Item>
                               {({ active }) => (
-                                <a
-                                  href='/company'
+                                <button
+                                  onClick={() => {
+                                    history.push({
+                                      pathname: '/verify',
+                                      state: {
+                                        link: 1,
+                                      },
+                                    });
+                                  }}
                                   className={classNames(
                                     active
                                       ? 'bg-gray-100 text-gray-900'
                                       : 'text-gray-700',
-                                    'block px-4 py-2 text-sm'
+                                    'block w-full px-4 py-2 text-sm'
                                   )}>
                                   Company
-                                </a>
+                                </button>
                               )}
                             </Menu.Item>
                             <Menu.Item>
                               {({ active }) => (
-                                <a
-                                  href='/user'
+                                <button
+                                  onClick={() => {
+                                    history.push({
+                                      pathname: '/verify',
+                                      state: {
+                                        link: 2,
+                                      },
+                                    });
+                                  }}
                                   className={classNames(
                                     active
                                       ? 'bg-gray-100 text-gray-900'
                                       : 'text-gray-700',
-                                    'block px-4 py-2 text-sm'
+                                    ' w-full block px-4 py-2 text-sm'
                                   )}>
                                   User
-                                </a>
+                                </button>
                               )}
                             </Menu.Item>
                           </div>
@@ -122,11 +137,6 @@ function Navbar({ signup, connected, login }) {
 
           <Disclosure.Panel className='sm:hidden'>
             <div className='px-2 pt-2 pb-3 space-y-1'>
-              <a
-                href='/'
-                className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
-                Home
-              </a>
               <Menu
                 as='div'
                 className='relative inline-block text-left onhover:bg-gray-700 '>

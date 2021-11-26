@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import SmartContract from '../abis/Decentraskill.json';
 import Navbar from '../components/Navbar';
 import Banner from '../components/Banner';
+import Footer from '../components/Footer';
 
 const LandingPage = () => {
   /** @type {import('../utils/store').ContextType} */
@@ -132,6 +133,7 @@ const LandingPage = () => {
     <div className='bg-white h-full'>
       <Navbar connected={0} login={login} signup={signUp} />
       <Banner />
+      <Footer />
     </div>
   );
 };

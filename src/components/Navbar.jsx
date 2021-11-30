@@ -9,7 +9,7 @@ import { StoreContext, signUp, login, connectToWallet } from '../utils';
 function Navbar() {
   let history = useHistory();
   const ctx = useContext(StoreContext);
-  const { state } = ctx;
+  const { state, setState } = ctx;
   const connected = state.signedIn;
 
   function classNames(...classes) {
@@ -58,10 +58,11 @@ function Navbar() {
                   <div className='flex space-x-4'>
                     <button
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
-                      // TODO: set email address
                       onClick={async () => {
                         if (state.connected) {
+                          // TODO: set email address
                           const success = await login(ctx, 'a@b.com');
+                          if (success) history.push(`/user/${state.accountId}`);
                         } else connectToWallet(ctx);
                       }}>
                       Login
@@ -213,14 +214,16 @@ function Navbar() {
                     <Menu.Items className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href='#'
+                          <button
+                            onClick={() => {
+                              setState({ ...state, signedIn: false });
+                            }}
                             className={classNames(
                               active ? 'bg-gray-100' : '',
                               'block px-4 py-2 text-sm text-gray-700'
                             )}>
                             Sign out
-                          </a>
+                          </button>
                         )}
                       </Menu.Item>
                     </Menu.Items>

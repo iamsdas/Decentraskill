@@ -1,44 +1,12 @@
-import { useContext, useEffect, useCallback } from 'react';
+import { useContext } from 'react';
 import { StoreContext } from '../utils/store';
-import Web3 from 'web3';
-import SmartContract from '../abis/Decentraskill.json';
 import Navbar from '../components/Navbar';
 import Banner from '../components/Banner';
 import Footer from '../components/Footer';
 
 const LandingPage = () => {
-  /** @type {import('../utils/store').ContextType} */
-  const { state, setState } = useContext(StoreContext);
-
-  const signUp = useCallback(async () => {
-    if (state.loaded) {
-      try {
-        await state.contract.methods
-          .sign_up(state.email, 'name', 'user')
-          .send({ from: state.account });
-        alert('login to continue');
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
-      console.log('still loading');
-    }
-  }, [state]);
-
-  const login = useCallback(async () => {
-    const accountType = await state.contract.methods.login(state.email).call({
-      from: state.account,
-    });
-    try {
-      const accountId = await state.contract.methods
-        .address_to_id(state.account)
-        .call();
-      setState({ ...state, accountType, accountId });
-      console.log('logged in with id:' + accountId);
-    } catch (e) {
-      alert('account does not exist');
-    }
-  }, [setState, state]);
+  const ctx = useContext(StoreContext);
+  const { state, setState } = ctx;
 
   const approveEmployee = async (experienceId, companyId) => {
     try {
@@ -104,34 +72,9 @@ const LandingPage = () => {
     }
   };
 
-  const initWeb3 = useCallback(async () => {
-    if (window.ethereum) {
-      await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const web3 = new Web3(window.ethereum);
-      const account = (await web3.eth.getAccounts())[0];
-      const netId = await web3.eth.net.getId();
-      const address = SmartContract.networks[netId].address;
-      const contract = new web3.eth.Contract(SmartContract.abi, address);
-
-      setState((state) => ({
-        ...state,
-        web3,
-        account,
-        contract,
-        loaded: true,
-      }));
-    } else {
-      alert('web3 not detected');
-    }
-  }, [setState]);
-
-  useEffect(() => {
-    initWeb3();
-  }, [initWeb3]);
-
   return (
     <div className='bg-white h-full'>
-      <Navbar connected={0} login={login} signup={signUp} />
+      <Navbar connected={0} />
       <Banner />
       <Footer />
     </div>

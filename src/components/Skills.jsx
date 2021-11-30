@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
-import { StoreContext } from '../utils/store';
+import { StoreContext } from '../utils';
 import ReCAPTCHA from 'react-google-recaptcha';
-import Comment from './comment.jsx';
+import Comment from './Comment';
 
 function Skills() {
   const [showModal, setShowModal] = useState(false);
@@ -9,7 +9,6 @@ function Skills() {
   const [newSkill, setNewSkill] = useState();
   const [verified, setVerified] = useState(false);
 
-  /** @type {import('../utils/store').StateType} */
   const { state } = useContext(StoreContext);
   const [active, setActive] = useState(1);
   const [skills, setSkills] = useState([

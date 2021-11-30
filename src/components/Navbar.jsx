@@ -1,15 +1,17 @@
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import DS_LOGO from '../assets/DS_LOGO.png';
 import { useHistory } from 'react-router-dom';
+import { StoreContext, signUp, login, connectToWallet } from '../utils';
 
-function Navbar({ signup, connected, login }) {
+function Navbar() {
   let history = useHistory();
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(' ');
-  }
+  const ctx = useContext(StoreContext);
+  const { state } = ctx;
+  const connected = state.signedIn;
+
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
   }
@@ -56,79 +58,21 @@ function Navbar({ signup, connected, login }) {
                   <div className='flex space-x-4'>
                     <button
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
-                      onClick={login}>
+                      // TODO: set email address
+                      onClick={async () => {
+                        if (state.connected) {
+                          const success = await login(ctx, 'a@b.com');
+                        } else connectToWallet(ctx);
+                      }}>
                       Login
                     </button>
-
-                    <Menu
-                      as='div'
-                      className='relative inline-block text-left onhover:bg-gray-700 '>
-                      <div>
-                        <Menu.Button className='inline-flex justify-center w-full rounded-md  shadow-sm px-3 py-2 bg-gray-800 text-md font-medium text-gray-300 hover:bg-gray-900 onhover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500'>
-                          SignUp
-                          <ChevronDownIcon
-                            className='-mr-1 ml-2 h-5 w-5 mt-1.5'
-                            aria-hidden='true'
-                          />
-                        </Menu.Button>
-                      </div>
-
-                      <Transition
-                        as={Fragment}
-                        enter='transition ease-out duration-100'
-                        enterFrom='transform opacity-0 scale-95'
-                        enterTo='transform opacity-100 scale-100'
-                        leave='transition ease-in duration-75'
-                        leaveFrom='transform opacity-100 scale-100'
-                        leaveTo='transform opacity-0 scale-95'>
-                        <Menu.Items className='origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                          <div className='py-1'>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  onClick={() => {
-                                    history.push({
-                                      pathname: '/verify',
-                                      state: {
-                                        link: 1,
-                                      },
-                                    });
-                                  }}
-                                  className={classNames(
-                                    active
-                                      ? 'bg-gray-100 text-gray-900'
-                                      : 'text-gray-700',
-                                    'block w-full px-4 py-2 text-sm'
-                                  )}>
-                                  Company
-                                </button>
-                              )}
-                            </Menu.Item>
-                            <Menu.Item>
-                              {({ active }) => (
-                                <button
-                                  onClick={() => {
-                                    history.push({
-                                      pathname: '/verify',
-                                      state: {
-                                        link: 2,
-                                      },
-                                    });
-                                  }}
-                                  className={classNames(
-                                    active
-                                      ? 'bg-gray-100 text-gray-900'
-                                      : 'text-gray-700',
-                                    ' w-full block px-4 py-2 text-sm'
-                                  )}>
-                                  User
-                                </button>
-                              )}
-                            </Menu.Item>
-                          </div>
-                        </Menu.Items>
-                      </Transition>
-                    </Menu>
+                    <button
+                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
+                      onClick={() => {
+                        history.push('/verify');
+                      }}>
+                      SignUp
+                    </button>
                   </div>
                 </div>
               </div>

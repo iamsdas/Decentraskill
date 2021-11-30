@@ -18,7 +18,7 @@ function Profile() {
       <div className='w-2/6 h-full'>
         <div className='border-black w-36 h-36 border-solid rounded-full bg-gray-500'>
           <div className='text-7xl text-center p-6'>
-            <i class='fas fa-user'></i>
+            <i className='fas fa-user'></i>
           </div>
         </div>
       </div>

@@ -21,6 +21,7 @@ export const connectToWallet = async (ctx: ICtx): Promise<void> => {
 
 export const login = async (ctx: ICtx, email: string): Promise<boolean> => {
   const { state, setState } = ctx;
+  console.log('logging in');
   const accountType = await state.contract?.methods.login(email).call({
     from: state.account,
   });

@@ -1,4 +1,5 @@
 import { Fragment, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
@@ -34,8 +35,8 @@ function Navbar() {
                 </Disclosure.Button>
               </div>
               <div className='flex-1 flex items-center justify-start sm:items-stretch sm:justify-start'>
-                <a
-                  href='/'
+                <Link
+                  to='/'
                   className='hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
                   <div className='flex-shrink-0 flex  items-center'>
                     <img
@@ -52,7 +53,7 @@ function Navbar() {
                       Decentraskill
                     </span>
                   </div>
-                </a>
+                </Link>
 
                 <div className='hidden sm:block mr-0 pt-3 absolute top-0 right-0 items-center justify-end'>
                   <div className='flex space-x-4'>

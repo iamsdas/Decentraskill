@@ -17,12 +17,6 @@ function Skills() {
       name: 'Skill 1',
       review: [{ username: 'dfgt', comment: 'sedrty' }],
     },
-    { id: 2, name: 'Skill 2', review: [{ username: 'asdf', comment: 'grew' }] },
-    {
-      id: 3,
-      name: 'Skill 3',
-      review: [{ username: 'sdfgh', comment: 'sdfgh' }],
-    },
   ]);
 
   const addSkill = async (skillName) => {
@@ -39,6 +33,8 @@ function Skills() {
         .skills_of_user(state.accountId)
         .call()
         .then((skillIdx) => {
+          console.log('skills');
+          console.log(skillIdx);
           skillIdx.forEach(async (id) => {
             const skill = await state.contract.skills(id).call();
             setSkills((skls) => ({ ...skls, skill }));

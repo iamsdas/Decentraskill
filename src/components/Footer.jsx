@@ -6,7 +6,7 @@ function Footer() {
         href='https://github.com/iamsdas/Decentraskill/'
         src=''
         className=' text-white text-xl hover:text-gray-300 absolute right-1 bottom-2 '>
-        <i class='fab fa-github'></i>
+        <i className='fab fa-github'></i>
       </a>
     </div>
   );

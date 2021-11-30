@@ -62,7 +62,7 @@ function Navbar() {
                         if (state.connected) {
                           // TODO: set email address
                           const success = await login(ctx, 'a@b.com');
-                          if (success) history.push(`/user/${state.accountId}`);
+                          if (success) history.push(`/user`);
                         } else connectToWallet(ctx);
                       }}>
                       Login

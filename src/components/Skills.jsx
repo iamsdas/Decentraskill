@@ -1,4 +1,5 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
+import { useParams } from 'react-router';
 import { StoreContext } from '../utils';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Comment from './Comment';
@@ -8,40 +9,50 @@ function Skills() {
   const [checkModal, setCheckModal] = useState(false);
   const [newSkill, setNewSkill] = useState();
   const [verified, setVerified] = useState(false);
-
+  const { id } = useParams();
   const { state } = useContext(StoreContext);
   const [active, setActive] = useState(1);
   const [skills, setSkills] = useState([
     {
-      id: 1,
+      id: 10,
       name: 'Skill 1',
       review: [{ username: 'dfgt', comment: 'sedrty' }],
+      verified: false,
     },
   ]);
 
-  const addSkill = async (skillName) => {
-    try {
-      await state.contract.methods.add_skill(state.accountId, skillName);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const addSkill = useCallback(
+    async (skillName) => {
+      try {
+        await state.contract.methods
+          .add_skill(state.accountId, skillName)
+          .send({ from: state.account });
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [state]
+  );
 
   useEffect(() => {
-    if (state.loaded) {
-      state.contract.methods
-        .skills_of_user(state.accountId)
-        .call()
-        .then((skillIdx) => {
-          console.log('skills');
-          console.log(skillIdx);
-          skillIdx.forEach(async (id) => {
-            const skill = await state.contract.skills(id).call();
-            setSkills((skls) => ({ ...skls, skill }));
-          });
+    state.contract.methods
+      .skills_of_user(id)
+      .call()
+      .then((skillIdx) => {
+        skillIdx.forEach(async (id) => {
+          const skill = await state.contract.methods.skills(id).call();
+          setSkills((skls) => [
+            ...skls,
+            {
+              id: parseInt(skill.id),
+              name: skill.name,
+              verified: skill.verified,
+              review: [],
+            },
+          ]);
         });
-    }
-  }, [state]);
+      });
+  }, [state, id]);
 
   const ActiveItem = () => {
     switch (active) {
@@ -56,7 +67,7 @@ function Skills() {
     }
   };
 
-  const skillAdded = () => {
+  const skillAdded = async () => {
     var flag = 0;
     for (var i = 0; i < skills.length; i++) {
       if (skills[i].name === newSkill) {
@@ -66,10 +77,15 @@ function Skills() {
       }
     }
     if (flag === 0) {
-      setSkills((prevskills) => [
-        ...prevskills,
-        { id: skills.length + 1, name: newSkill },
-      ]);
+      try {
+        await addSkill(newSkill);
+        setSkills((prevskills) => [
+          ...prevskills,
+          { id: skills.length + 1, name: newSkill },
+        ]);
+      } catch (e) {
+        console.error(e);
+      }
       setNewSkill('');
       setShowModal(false);
     }

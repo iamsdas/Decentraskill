@@ -57,22 +57,13 @@ function Navbar() {
 
                 <div className='hidden sm:block mr-0 pt-3 absolute top-0 right-0 items-center justify-end'>
                   <div className='flex space-x-4'>
-                  <button
-                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
-                      onClick={async () => {
-                        if (1) {
-                          history.push(`/user`);
-                        } else connectToWallet(ctx);
-                      }}>
-                      Profile
-                    </button>
                     <button
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
                       onClick={async () => {
                         if (state.connected) {
                           // TODO: set email address
                           const success = await login(ctx, 'a@b.com');
-                          if (success) history.push(`/user`);
+                          if (success) alert('welcome back');
                         } else connectToWallet(ctx);
                       }}>
                       Login
@@ -224,16 +215,34 @@ function Navbar() {
                     <Menu.Items className='origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'>
                       <Menu.Item>
                         {({ active }) => (
-                          <button
-                            onClick={() => {
-                              setState({ ...state, signedIn: false });
-                            }}
-                            className={classNames(
-                              active ? 'bg-gray-100' : '',
-                              'block px-4 py-2 text-sm text-gray-700'
-                            )}>
-                            Sign out
-                          </button>
+                          <div>
+                            <div>
+                              <button
+                                onClick={() => {
+                                  setState({ ...state, signedIn: false });
+                                }}
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700'
+                                )}>
+                                Sign out
+                              </button>
+                            </div>
+                            <div>
+                              <button
+                                className={classNames(
+                                  active ? 'bg-gray-100' : '',
+                                  'block px-4 py-2 text-sm text-gray-700'
+                                )}
+                                onClick={async () => {
+                                  if (state.account) {
+                                    history.push(`/user/${state.accountId}`);
+                                  } else connectToWallet(ctx);
+                                }}>
+                                Profile
+                              </button>
+                            </div>
+                          </div>
                         )}
                       </Menu.Item>
                     </Menu.Items>

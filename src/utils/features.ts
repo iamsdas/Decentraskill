@@ -39,11 +39,17 @@ export const login = async (ctx: ICtx, email: string): Promise<boolean> => {
   }
 };
 
-export const signUp = async (ctx: ICtx): Promise<boolean> => {
+export const signUp = async (
+  ctx: ICtx,
+  email: string,
+  name: string,
+  account: string
+): Promise<boolean> => {
   const { state } = ctx;
+  console.log('requesting sign up');
   try {
     await state.contract?.methods
-      .sign_up(state.email, 'name', 'user')
+      .sign_up(email, name, account)
       .send({ from: state.account });
     alert('login to continue');
     return true;

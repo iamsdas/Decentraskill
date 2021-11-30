@@ -1,10 +1,7 @@
-import { useContext, useRef } from 'react';
-import { StoreContext } from '../utils/store';
-import design from '../assets/design.png';
+import { useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
 function Banner() {
-  const { state } = useContext(StoreContext);
   const history = useHistory();
   const idRef = useRef('');
   return (
@@ -28,7 +25,7 @@ function Banner() {
           <button
             className='bg-gray-800 text-white rounded-full p-2 m-1 hover:bg-gray-700 focus:outline-none w-12 h-12 flex items-center justify-center'
             onClick={() => {
-              history.push(`/user/${idRef.current}`);
+              history.push(`/user/${idRef.current.value}`);
             }}>
             <i className='material-icons'>search</i>
           </button>

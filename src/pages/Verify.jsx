@@ -43,7 +43,14 @@ function Verify() {
               if (state.connected) {
                 if (emailRef.current !== '') {
                   const acc = accType ? 'user' : 'company';
-                  if (await signUp(ctx, emailRef.current, nameRef.current, acc))
+                  if (
+                    await signUp(
+                      ctx,
+                      emailRef.current.value,
+                      nameRef.current.value,
+                      acc
+                    )
+                  )
                     history.push('/');
                   else alert('signup error');
                 } else {

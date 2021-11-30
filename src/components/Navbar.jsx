@@ -57,6 +57,15 @@ function Navbar() {
 
                 <div className='hidden sm:block mr-0 pt-3 absolute top-0 right-0 items-center justify-end'>
                   <div className='flex space-x-4'>
+                  <button
+                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
+                      onClick={async () => {
+                        if (1) {
+                          history.push(`/user`);
+                        } else connectToWallet(ctx);
+                      }}>
+                      Profile
+                    </button>
                     <button
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
                       onClick={async () => {

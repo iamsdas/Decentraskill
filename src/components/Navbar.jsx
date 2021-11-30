@@ -1,5 +1,4 @@
 import { Fragment, useContext } from 'react';
-import { Link } from 'react-router-dom';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
@@ -35,8 +34,8 @@ function Navbar() {
                 </Disclosure.Button>
               </div>
               <div className='flex-1 flex items-center justify-start sm:items-stretch sm:justify-start'>
-                <Link
-                  to='/'
+                <a
+                  href='/'
                   className='hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
                   <div className='flex-shrink-0 flex  items-center'>
                     <img
@@ -53,10 +52,21 @@ function Navbar() {
                       Decentraskill
                     </span>
                   </div>
-                </Link>
+                </a>
 
                 <div className='hidden sm:block mr-0 pt-3 absolute top-0 right-0 items-center justify-end'>
                   <div className='flex space-x-4'>
+                    <button
+                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
+                      onClick={async () => {
+                        if (state.signedIn) {
+                          // TODO: set email address
+                          const success = await login(ctx, 'a@b.com');
+                          if (success) history.push(`/user/`);
+                        } else connectToWallet(ctx);
+                      }}>
+                      Profile
+                    </button>
                     <button
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
                       onClick={async () => {

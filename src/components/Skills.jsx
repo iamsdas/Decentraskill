@@ -21,38 +21,44 @@ function Skills() {
     },
   ]);
 
-  const addSkill = useCallback(
-    async (skillName) => {
+  const updateSkillList = useCallback(async () => {
+    const skillids = await state.contract.methods.skills_of_user(id).call();
+    skillids.forEach(async (skid) => {
+      if (!skills.some((skill) => skill.id === parseInt(skid) - 1)) {
+        const skill = await state.contract.methods.skills(skid).call();
+        setSkills([
+          ...skills,
+          {
+            id: parseInt(skill.id),
+            name: skill.name,
+            verified: skill.verified,
+            review: [],
+          },
+        ]);
+      }
+    });
+  }, [id, skills, state.contract]);
+
+  const addSkill = useCallback(async () => {
+    if (skills.some((skill) => skill.name === newSkill.name))
+      alert('Already a skill, Please add some different skill name');
+    else {
+      setNewSkill('');
+      setShowModal(false);
       try {
         await state.contract.methods
-          .add_skill(state.accountId, skillName)
+          .add_skill(state.accountId, newSkill)
           .send({ from: state.account });
+        updateSkillList();
       } catch (e) {
         console.error(e);
       }
-    },
-    [state]
-  );
+    }
+  }, [state, skills, newSkill, updateSkillList]);
 
   useEffect(() => {
-    state.contract.methods
-      .skills_of_user(id)
-      .call()
-      .then((skillIdx) => {
-        skillIdx.forEach(async (id) => {
-          const skill = await state.contract.methods.skills(id).call();
-          setSkills((skls) => [
-            ...skls,
-            {
-              id: parseInt(skill.id),
-              name: skill.name,
-              verified: skill.verified,
-              review: [],
-            },
-          ]);
-        });
-      });
-  }, [state, id]);
+    updateSkillList();
+  }, [updateSkillList]);
 
   const ActiveItem = () => {
     switch (active) {
@@ -67,31 +73,7 @@ function Skills() {
     }
   };
 
-  const skillAdded = async () => {
-    var flag = 0;
-    for (var i = 0; i < skills.length; i++) {
-      if (skills[i].name === newSkill) {
-        alert('Already a skill, Please add some different skill name');
-        setNewSkill('');
-        flag = 1;
-      }
-    }
-    if (flag === 0) {
-      try {
-        await addSkill(newSkill);
-        setSkills((prevskills) => [
-          ...prevskills,
-          { id: skills.length + 1, name: newSkill },
-        ]);
-      } catch (e) {
-        console.error(e);
-      }
-      setNewSkill('');
-      setShowModal(false);
-    }
-  };
-
-  function Check(value) {
+  function check(value) {
     console.log('Captcha value: ' + value);
     setVerified(true);
   }
@@ -158,7 +140,7 @@ function Skills() {
                             <h1>Capcha</h1>
                             <ReCAPTCHA
                               sitekey='6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
-                              onChange={Check}
+                              onChange={check}
                             />
                           </p>
                         </div>
@@ -240,7 +222,7 @@ function Skills() {
                     <button
                       className='bg-emerald-500 text-black active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                       type='button'
-                      onClick={skillAdded}>
+                      onClick={addSkill}>
                       Add
                     </button>
                   </div>

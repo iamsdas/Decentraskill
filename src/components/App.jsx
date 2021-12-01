@@ -15,8 +15,8 @@ const App = () => {
         <Suspense fallback={<div>Loading...</div>}>
           <Switch>
             <Route exact path='/' component={LandingPage} />
-            <Route exact path='/company/:id' component={Company_Dashboard} />
-            <Route exact path='/user/:id' component={User_Dashboard} />
+            <Route exact path='/company/' component={Company_Dashboard} />
+            <Route exact path='/user/' component={User_Dashboard} />
             <Route exact path='/verify' component={Verify} />
           </Switch>
         </Suspense>

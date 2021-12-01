@@ -26,7 +26,7 @@ function Profile() {
   }, [id, state.contract, history.location]);
 
   return (
-    <div className='flex flex-row h-full w-full p-3 items-center justify-between text-gray-600'>
+    <div className='flex flex-row h-full w-full p-3 items-center justify-items-stretch text-gray-600'>
       <div className='w-4/6 h-full'>
         <h1 className='text-xl text-black'>{name}</h1>
         <div className='text-3xl '>{role}</div>
@@ -34,19 +34,22 @@ function Profile() {
           <h1>{location}</h1>
         </div>
       </div>
-      <div className='w-2/6 h-full'>
+      <div className='w-2/6 h-full flex flex-row justify-end'>
         <div className='border-black w-36 h-36 border-solid rounded-full bg-gray-500'>
           <div className='text-7xl text-center p-6'>
             <i className='fas fa-user'></i>
           </div>
         </div>
+        <div>
+          <button
+            className='bg-red-800 inline text-white active:bg-red-800 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+            type='button'
+            onClick={() => setShowModal(true)}>
+            <i class='fas fa-edit'></i>
+          </button>
+        </div>
       </div>
-      <button
-        className='bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-        type='button'
-        onClick={() => setShowModal(true)}>
-        Edit
-      </button>
+
       {showModal ? (
         <div>
           {' '}
@@ -70,8 +73,7 @@ function Profile() {
                 {/*body*/}
                 <div className='relative p-6 flex-auto my-4 text-black text-lg leading-relaxed'>
                   <form className='mx-auto'>
-                    <label>Role: {role}</label>
-                    Edit:
+                    <label className='px-1'>Role:</label>
                     <input
                       className='border-solid border-black px-2'
                       type='text'
@@ -80,8 +82,8 @@ function Profile() {
                         setRole(e.target.value);
                       }}></input>
                     <br />
-                    <label>Location: {location}</label>
-                    Edit:
+                    <label className='px-1'>Location:</label>
+
                     <input
                       className='border-solid border-black px-2'
                       type='text'

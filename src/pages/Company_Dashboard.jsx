@@ -8,7 +8,7 @@ const Profile = lazy(() => import('../components/Profile'));
 function Company_Dashboard() {
   const items = [
     { id: 1, name: 'Requests' },
-    { id: 2, name: 'EditTeam' },
+    { id: 2, name: 'Team' },
   ];
 
   const [active, setActive] = useState(1);

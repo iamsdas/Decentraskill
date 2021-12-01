@@ -173,6 +173,7 @@ contract Decentraskill {
     {
         skill storage new_skill = skills.push();
         employees[userid].user_skills.push(skills.length - 1);
+        new_skill.id = skills.length - 1;
         new_skill.name = skill_name;
         new_skill.verified = false;
         new_skill.skill_certifications = new uint256[](0);

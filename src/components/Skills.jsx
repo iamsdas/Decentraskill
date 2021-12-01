@@ -11,20 +11,13 @@ function Skills() {
   const [verified, setVerified] = useState(false);
   const { id } = useParams();
   const { state } = useContext(StoreContext);
-  const [active, setActive] = useState(1);
-  const [skills, setSkills] = useState([
-    {
-      id: 10,
-      name: 'Skill 1',
-      review: [{ username: 'dfgt', comment: 'sedrty' }],
-      verified: false,
-    },
-  ]);
+  const [active, setActive] = useState(-1);
+  const [skills, setSkills] = useState([]);
 
   const updateSkillList = useCallback(async () => {
     const skillids = await state.contract.methods.skills_of_user(id).call();
     skillids.forEach(async (skid) => {
-      if (!skills.some((skill) => skill.id === parseInt(skid) - 1)) {
+      if (!skills.some((skill) => skill.id === parseInt(skid))) {
         const skill = await state.contract.methods.skills(skid).call();
         setSkills([
           ...skills,
@@ -32,7 +25,6 @@ function Skills() {
             id: parseInt(skill.id),
             name: skill.name,
             verified: skill.verified,
-            review: [],
           },
         ]);
       }
@@ -62,14 +54,10 @@ function Skills() {
 
   const ActiveItem = () => {
     switch (active) {
-      case 1:
-        return <Comment skills={skills[0]} />;
-      case 2:
-        return <Comment skills={skills[1]} />;
-      case 3:
-        return <Comment skills={skills[2]} />;
-      default:
+      case -1:
         return <h1>No option selcted</h1>;
+      default:
+        return <Comment skid={active} />;
     }
   };
 

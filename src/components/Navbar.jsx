@@ -72,7 +72,8 @@ function Navbar() {
                       onClick={async () => {
                         if (state.connected) {
                           // TODO: set email address
-                          const success = await login(ctx, 'a@b.com');
+                          const email = prompt('enter email address: ');
+                          const success = await login(ctx, email);
                           if (success) alert('welcome back');
                         } else connectToWallet(ctx);
                       }}>

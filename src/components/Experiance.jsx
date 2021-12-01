@@ -6,10 +6,10 @@ function Experiance() {
   const { state } = useContext(StoreContext);
   const [active, setActive] = useState(-1);
   const [showModal, setShowModal] = useState(false);
-  const [newStartDate, setNewStartDate] = useState();
-  const [newEndDate, setNewEndDate] = useState();
+  const [newStartDate, setNewStartDate] = useState('');
+  const [newEndDate, setNewEndDate] = useState('');
   const [newRole, setNewRole] = useState('');
-  const [newCompanyID, setNewCompanyID] = useState();
+  const [newCompanyID, setNewCompanyID] = useState('');
   const { id } = useParams();
 
   const [exps, setExps] = useState([]);
@@ -39,21 +39,27 @@ function Experiance() {
     if (exps.some((exp) => exp.company_id === newCompanyID))
       alert('already exists');
     else {
-      setNewStartDate();
-      setNewEndDate('');
-      setNewRole('');
-      setNewCompanyID();
-      setShowModal(false);
       try {
         await state.contract.methods
-          .add_experience()
+          .add_experience(
+            state.accountId,
+            newStartDate,
+            newEndDate,
+            newRole,
+            newCompanyID
+          )
           .send({ from: state.account });
+        setNewStartDate('');
+        setNewEndDate('');
+        setNewRole('');
+        setNewCompanyID('');
+        setShowModal(false);
         getExps();
       } catch (e) {
         console.error(e);
       }
     }
-  }, [state, exps, getExps, newCompanyID]);
+  }, [state, exps, getExps, newCompanyID, newRole, newEndDate, newStartDate]);
 
   useEffect(() => {
     getExps();

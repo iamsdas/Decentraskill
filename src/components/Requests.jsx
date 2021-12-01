@@ -26,6 +26,20 @@ function Requests() {
     });
   }, [id, reqs, state.contract]);
 
+  const approveExp = useCallback(
+    async (rid) => {
+      try {
+        await state.contract.methods
+          .approve_experience(rid, id)
+          .send({ from: state.account });
+      } catch (e) {
+        alert('error approving');
+        console.error(e);
+      }
+    },
+    [state, id]
+  );
+
   useEffect(() => {
     getRequests();
   }, [getRequests]);
@@ -33,34 +47,43 @@ function Requests() {
   return (
     <div>
       <div>
-        {reqs.map((item, i) => {
-          return (
-            <div className='p-2 m-2 flex flex-row justify-around items-center bg-gray-200 border-solid rounded-lg '>
-              <div>
-                <p>
-                  <h1 className='font-medium text-lg text-blue-700 inline'>
-                    {/* {item.name} */}
-                    Person
-                  </h1>{' '}
-                  has requested to join the team as {item.role} in your
-                  Oragnization.
-                </p>
+        {reqs.length > 0 ? (
+          reqs.map((item) => {
+            return (
+              <div
+                className='p-2 m-2 flex flex-row justify-around items-center bg-gray-200 border-solid rounded-lg '
+                id={item.id}>
+                <div>
+                  <p>
+                    <h1 className='font-medium text-lg text-blue-700 inline'>
+                      {/* {item.name} */}
+                      Person
+                    </h1>{' '}
+                    has requested to join the team as {item.role} in your
+                    Oragnization.
+                  </p>
+                </div>
+                <div>
+                  <button
+                    className='bg-gray-800 text-white active:bg-gray-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                    type='button'
+                    onClick={() => {
+                      approveExp(item.id);
+                    }}>
+                    Accept
+                  </button>
+                  <button
+                    className='bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                    type='button'>
+                    Deny
+                  </button>
+                </div>
               </div>
-              <div>
-                <button
-                  className='bg-gray-800 text-white active:bg-gray-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-                  type='button'>
-                  Accept
-                </button>
-                <button
-                  className='bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-                  type='button'>
-                  Deny
-                </button>
-              </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <div>no requests</div>
+        )}
       </div>
     </div>
   );

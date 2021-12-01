@@ -235,7 +235,9 @@ function Navbar() {
                               <button
                                 className='bg-gray-100 hover:bg-gray-200 w-full p-2'
                                 onClick={async () => {
-                                  history.push(`/user/${state.accountId}`);
+                                  history.push(
+                                    `/${state.accountType}/${state.accountId}`
+                                  );
                                 }}>
                                 {state.accountType.toLowerCase() === 'user'
                                   ? 'Profile'

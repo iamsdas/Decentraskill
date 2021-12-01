@@ -1,24 +1,46 @@
-import { useState } from 'react';
+import { useState, useContext, useCallback, useEffect } from 'react';
+import { useParams } from 'react-router';
+import { StoreContext } from '../utils/store';
 
 function Requests() {
-  const [req, setReq] = useState([
-    {
-      id: 123,
-      name: 'Hardik Agarwal ',
-      role: 'SDE-1',
-    },
-  ]);
+  const { id } = useParams();
+  const { state } = useContext(StoreContext);
+  const [reqs, setReq] = useState([]);
+
+  const getRequests = useCallback(async () => {
+    const reqids = await state.contract.methods
+      .requested_emp_of_company(id)
+      .call();
+    reqids.forEach(async (rid) => {
+      if (!reqs.some(async (req) => req.id === parseInt(rid))) {
+        const req = await state.contract.methods.experiences(rid).call();
+        setReq([
+          ...reqs,
+          {
+            id: parseInt(rid),
+            // name: (await state.contract.methods.companies(rid).call()).name,
+            role: req.role,
+          },
+        ]);
+      }
+    });
+  }, [id, reqs, state.contract]);
+
+  useEffect(() => {
+    getRequests();
+  }, [getRequests]);
 
   return (
     <div>
       <div>
-        {req.map((item, i) => {
+        {reqs.map((item, i) => {
           return (
             <div className='p-2 m-2 flex flex-row justify-around items-center bg-gray-200 border-solid rounded-lg '>
               <div>
                 <p>
                   <h1 className='font-medium text-lg text-blue-700 inline'>
-                    {item.name}
+                    {/* {item.name} */}
+                    Person
                   </h1>{' '}
                   has requested to join the team as {item.role} in your
                   Oragnization.

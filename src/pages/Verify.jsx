@@ -11,7 +11,7 @@ function Verify() {
   const emailRef = useRef('');
   const nameRef = useRef('');
 
-  const [accType, setType] = useState('user');
+  const [accType, setType] = useState('company');
 
   return (
     <div>
@@ -48,7 +48,7 @@ function Verify() {
                       ctx,
                       emailRef.current.value,
                       nameRef.current.value,
-                      acc
+                      accType
                     )
                   )
                     history.push('/');

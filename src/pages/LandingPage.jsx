@@ -6,22 +6,11 @@ import Footer from '../components/Footer';
 
 const LandingPage = () => {
   const ctx = useContext(StoreContext);
-  const { state, setState } = ctx;
+  const { state } = ctx;
 
   const approveEmployee = async (experienceId, companyId) => {
     try {
       await state.contract.methods.approve_experience(experienceId, companyId);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const updateWallet = async (newAddress) => {
-    try {
-      await state.contract.methods.update_wallet_address(
-        state.email,
-        newAddress
-      );
     } catch (e) {
       console.error(e);
     }

@@ -58,3 +58,22 @@ export const signUp = async (
     return false;
   }
 };
+
+export const updateWallet = async (
+  ctx: ICtx,
+  newAddress: string
+): Promise<boolean> => {
+  const { state } = ctx;
+  try {
+    await state.contract?.methods.update_wallet_address(
+      state.email,
+      newAddress
+    );
+    alert('address updated');
+    return true;
+  } catch (e) {
+    console.error(e);
+    alert('address update failed');
+    return false;
+  }
+};

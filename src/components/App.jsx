@@ -1,7 +1,7 @@
 import { Suspense, lazy, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { StoreContext, initialState } from '../utils';
-import Verify from '../pages/Verify';
+const Verify = lazy(() => import('../pages/Verify'));
 const LandingPage = lazy(() => import('../pages/LandingPage'));
 const Company_Dashboard = lazy(() => import('../pages/Company_Dashboard'));
 const User_Dashboard = lazy(() => import('../pages/User_Dashboard'));

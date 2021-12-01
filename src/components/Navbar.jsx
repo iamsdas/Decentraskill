@@ -4,7 +4,7 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import DS_LOGO from '../assets/DS_LOGO.png';
 import { useHistory } from 'react-router-dom';
-import { StoreContext, login, connectToWallet } from '../utils';
+import { StoreContext, login, connectToWallet, updateWallet } from '../utils';
 
 function Navbar() {
   let history = useHistory();
@@ -59,19 +59,11 @@ function Navbar() {
                     <button
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
                       onClick={async () => {
-                        if (state.signedIn) {
-                          // TODO: set email address
-                          const success = await login(ctx, 'a@b.com');
-                          if (success) history.push(`/user/`);
-                        } else connectToWallet(ctx);
-                      }}>
-                      Profile
-                    </button>
-                    <button
-                      className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
-                      onClick={async () => {
                         if (state.connected) {
-                          const email = prompt('enter email address: ');
+                          const email =
+                            localStorage.getItem('email') ??
+                            prompt('enter email address: ');
+                          localStorage.setItem('email', email);
                           const success = await login(ctx, email);
                           if (success) alert('welcome back');
                         } else connectToWallet(ctx);
@@ -231,25 +223,31 @@ function Navbar() {
                                 onClick={() => {
                                   setState({ ...state, signedIn: false });
                                 }}
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700'
-                                )}>
+                                className='bg-gray-100 hover:bg-gray-200 w-full p-2'>
                                 Sign out
                               </button>
                             </div>
                             <div>
                               <button
-                                className={classNames(
-                                  active ? 'bg-gray-100' : '',
-                                  'block px-4 py-2 text-sm text-gray-700'
-                                )}
+                                className='bg-gray-100 hover:bg-gray-200 w-full p-2'
                                 onClick={async () => {
-                                  if (state.account) {
-                                    history.push(`/user/${state.accountId}`);
-                                  } else connectToWallet(ctx);
+                                  history.push(`/user/${state.accountId}`);
                                 }}>
-                                Profile
+                                {state.accountType.toLowerCase() === 'user'
+                                  ? 'Profile'
+                                  : 'Dashboard'}
+                              </button>
+                            </div>
+                            <div>
+                              <button
+                                className='bg-gray-100 hover:bg-gray-200 w-full p-2'
+                                onClick={() => {
+                                  const newAddr = prompt(
+                                    'enter wallet address'
+                                  );
+                                  updateWallet(ctx, newAddr);
+                                }}>
+                                change connected wallet
                               </button>
                             </div>
                           </div>

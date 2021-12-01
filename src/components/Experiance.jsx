@@ -1,106 +1,70 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { StoreContext } from '../utils/store';
+import { useParams } from 'react-router';
 
 function Experiance() {
-  /** @type {import('../utils/store').StateType} */
   const { state } = useContext(StoreContext);
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(-1);
   const [showModal, setShowModal] = useState(false);
-  const [newName, setNewName] = useState('');
   const [newStartDate, setNewStartDate] = useState();
   const [newEndDate, setNewEndDate] = useState();
   const [newRole, setNewRole] = useState('');
   const [newCompanyID, setNewCompanyID] = useState();
-  const [newexp, setNewExp] = useState([
-    {
-      id: null,
-      name: ' ',
-      startDate: null,
-      endDate: null,
-      role: ' ',
-      companyId: null,
-    },
-  ]);
-  const [exps, setExps] = useState([
-    {
-      id: 1,
-      name: 'Google',
-      startDate: 1 - 2 - 2001,
-      endDate: 2 - 2 - 2005,
-      role: 'Software enginner',
-      companyId: 1001,
-    },
-  ]);
+  const { id } = useParams();
 
-  const requestCompany = async (startDate, endDate, role, companyId) => {
-    try {
-      await state.contract.methods.add_experience(
-        state.accountId,
-        startDate,
-        endDate,
-        role,
-        companyId
-      );
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const [exps, setExps] = useState([]);
 
-  useEffect(() => {
-    if (state.loaded) {
-      state.contract.methods
-        .exp_of_user(state.accountId)
-        .call()
-        .then((skillIdx) => {
-          skillIdx.forEach(async (id) => {
-            const exp = await state.contract.experiences(id).call();
-            setExps((exps) => ({ ...exps, exp }));
-          });
-        });
-    }
-  }, [state]);
-
-  const ActiveItem = () => {
-    switch (active) {
-      case 1:
-        return company(0);
-      case 2:
-        return company(1);
-      case 3:
-        return company(2);
-      default:
-        return <h1>No option selcted</h1>;
-    }
-  };
-
-  const ExpAdded = () => {
-    var flag = 0;
-    for (var i = 0; i < exps.length; i++) {
-      if (exps[i].name === newexp) {
-        alert('Already a skill, Please add some different skill name');
-        setNewExp(0);
-        flag = 1;
+  const getExps = useCallback(async () => {
+    const expids = await state.contract.methods.exp_of_user(id).call();
+    expids.forEach(async (eid) => {
+      if (!exps.some(async (exp) => exp.id === parseInt(eid))) {
+        const exp = await state.contract.methods.experiences(eid).call();
+        setExps([
+          ...exps,
+          {
+            id: parseInt(eid),
+            name: (await state.contract.methods.companies(eid).call()).name,
+            current: exp.current,
+            startDate: exp.starting_date,
+            endDate: exp.ending_date,
+            role: exp.role,
+            approved: exp.is_approved,
+          },
+        ]);
       }
-    }
-    if (flag === 0) {
-      setExps((prevexp) => [
-        ...prevexp,
-        {
-          id: exps.length + 1,
-          name: newName,
-          startDate: newStartDate,
-          endDate: newEndDate,
-          role: newRole,
-          companyId: 100,
-        },
-      ]);
-      setNewExp('');
-      setNewName('');
+    });
+  }, [id, exps, state.contract]);
+
+  const addExp = useCallback(async () => {
+    if (exps.some((exp) => exp.company_id === newCompanyID))
+      alert('already exists');
+    else {
       setNewStartDate();
       setNewEndDate('');
       setNewRole('');
       setNewCompanyID();
       setShowModal(false);
+      try {
+        await state.contract.methods
+          .add_experience()
+          .send({ from: state.account });
+        getExps();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [state, exps, getExps, newCompanyID]);
+
+  useEffect(() => {
+    getExps();
+  }, [getExps]);
+
+  const ActiveItem = () => {
+    switch (active) {
+      case -1:
+        return <h1>No option selcted</h1>;
+      default:
+        return company(active);
     }
   };
 
@@ -161,13 +125,13 @@ function Experiance() {
                   {/*body*/}
                   <div className='relative p-6 flex-auto my-4 text-black text-lg leading-relaxed'>
                     <form>
-                      <label>Company Name:</label>
+                      <label>Company id:</label>
                       <input
                         placeholder='Eg:JavaScript'
                         className='border-solid border-black px-2'
-                        value={newName}
+                        value={newCompanyID}
                         onChange={(e) => {
-                          setNewName(e.target.value);
+                          setNewCompanyID(e.target.value);
                         }}></input>
                       <br />
                       <label>Start Date:</label>
@@ -210,7 +174,7 @@ function Experiance() {
                     <button
                       className='bg-emerald-500 text-black active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                       type='button'
-                      onClick={ExpAdded}>
+                      onClick={addExp}>
                       Add
                     </button>
                   </div>

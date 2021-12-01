@@ -34,8 +34,10 @@ function Navbar() {
                 </Disclosure.Button>
               </div>
               <div className='flex-1 flex items-center justify-start sm:items-stretch sm:justify-start'>
-                <a
-                  href='/'
+                <button
+                  onClick={() => {
+                    history.push('/');
+                  }}
                   className='hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
                   <div className='flex-shrink-0 flex  items-center'>
                     <img
@@ -52,7 +54,7 @@ function Navbar() {
                       Decentraskill
                     </span>
                   </div>
-                </a>
+                </button>
 
                 <div className='hidden sm:block mr-0 pt-3 absolute top-0 right-0 items-center justify-end'>
                   <div className='flex space-x-4'>
@@ -166,8 +168,10 @@ function Navbar() {
               </div>
 
               <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
-                <a
-                  href='/'
+                <button
+                  onClick={() => {
+                    history.push('/');
+                  }}
                   className='hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 onhover: text-white'>
                   <div className='flex-shrink-0 flex  items-center'>
                     <img
@@ -184,7 +188,7 @@ function Navbar() {
                       Decentraskill
                     </span>
                   </div>
-                </a>
+                </button>
               </div>
               <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
                 <button
@@ -223,7 +227,7 @@ function Navbar() {
                                 onClick={() => {
                                   setState({ ...state, signedIn: false });
                                 }}
-                                className='bg-gray-100 hover:bg-gray-200 w-full p-2'>
+                                className='bg-gray-100 hover:bg-gray-200 w-full py-2 px-1'>
                                 Sign out
                               </button>
                             </div>

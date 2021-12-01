@@ -1,25 +1,29 @@
 import { useState, useContext, useEffect } from 'react';
 import { StoreContext } from '../utils/store';
 import { useParams } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 function Profile() {
   const [showModal, setShowModal] = useState(false);
   const { state } = useContext(StoreContext);
   const { id } = useParams();
-  const [name, setName] = useState('User');
+  const [name, setName] = useState('loading');
   const [role, setRole] = useState('Software Developer');
   const [location, setLocation] = useState('India');
+  const history = useHistory();
 
   useEffect(() => {
     (async () => {
       try {
-        const user = await state.contract.methods.employees(id).call();
+        const user = history.location.pathname.includes('company')
+          ? await state.contract.methods.companies(id).call()
+          : await state.contract.methods.employees(id).call();
         setName(user.name);
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [id, state.contract]);
+  }, [id, state.contract, history.location]);
 
   return (
     <div className='flex flex-row h-full w-full p-3 items-center justify-between text-gray-600'>

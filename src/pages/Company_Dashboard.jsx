@@ -2,6 +2,7 @@ import { useState, lazy } from 'react';
 import Navbar from '../components/Navbar';
 import Requests from '../components/Requests';
 import EditTeam from '../components/EditTeam';
+
 const Profile = lazy(() => import('../components/Profile'));
 
 function Company_Dashboard() {

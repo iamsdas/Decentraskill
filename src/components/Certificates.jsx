@@ -19,7 +19,7 @@ function Certificates() {
     },
   ]);
 
-  const { state, setState } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
 
   const [newName, setNewName] = useState('');
   const [newIssuer, setNewIssuer] = useState('');
@@ -34,7 +34,9 @@ function Certificates() {
         const cids = await state.contract.methods.cert_of_skill(skid).call();
         cids.forEach(async (cid) => {
           if (!certificates.some((certi) => certi.id === parseInt(cid))) {
-            const certi = await state.contract.certifications(cid).call();
+            const certi = await state.contract.methods
+              .certifications(cid)
+              .call();
             setCertificates([
               ...certificates,
               {
@@ -67,16 +69,19 @@ function Certificates() {
         setNewLink('');
         setShowModal(false);
         const skillids = await state.contract.methods.skills_of_user(id).call();
+        console.log(skillids);
         if (skillids.length > 0) {
-          await state.contract.methods.add_certification(
-            state.accountId,
-            newLink,
-            newIssueDate,
-            newValidity,
-            newName,
-            newIssuer,
-            skillids[0]
-          );
+          await state.contract.methods
+            .add_certification(
+              state.accountId,
+              newLink,
+              newIssueDate,
+              newValidity,
+              newName,
+              newIssuer,
+              skillids[0]
+            )
+            .send({ from: state.account });
           getCertificates();
         } else throw new Error('no skill to link to');
       } catch (e) {

@@ -35,29 +35,6 @@ const LandingPage = () => {
     }
   };
 
-  const addCertificate = async (
-    certUrl,
-    issueDate,
-    validTill,
-    certName,
-    issuer,
-    linkedSkill
-  ) => {
-    try {
-      await state.contract.methods.add_certification(
-        state.accountId,
-        certUrl,
-        issueDate,
-        validTill,
-        certName,
-        issuer,
-        linkedSkill
-      );
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   const endorseSkill = async (empId, skillId, comment) => {
     const date = new Date();
     try {

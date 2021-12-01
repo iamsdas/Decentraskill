@@ -4,7 +4,7 @@ import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import DS_LOGO from '../assets/DS_LOGO.png';
 import { useHistory } from 'react-router-dom';
-import { StoreContext, signUp, login, connectToWallet } from '../utils';
+import { StoreContext, login, connectToWallet } from '../utils';
 
 function Navbar() {
   let history = useHistory();
@@ -71,7 +71,6 @@ function Navbar() {
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
                       onClick={async () => {
                         if (state.connected) {
-                          // TODO: set email address
                           const email = prompt('enter email address: ');
                           const success = await login(ctx, email);
                           if (success) alert('welcome back');

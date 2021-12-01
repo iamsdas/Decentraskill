@@ -14,7 +14,7 @@ function Skills() {
   const [active, setActive] = useState(-1);
   const [skills, setSkills] = useState([]);
 
-  const updateSkillList = useCallback(async () => {
+  const getSkills = useCallback(async () => {
     const skillids = await state.contract.methods.skills_of_user(id).call();
     skillids.forEach(async (skid) => {
       if (!skills.some((skill) => skill.id === parseInt(skid))) {
@@ -41,16 +41,16 @@ function Skills() {
         await state.contract.methods
           .add_skill(state.accountId, newSkill)
           .send({ from: state.account });
-        updateSkillList();
+        getSkills();
       } catch (e) {
         console.error(e);
       }
     }
-  }, [state, skills, newSkill, updateSkillList]);
+  }, [state, skills, newSkill, getSkills]);
 
   useEffect(() => {
-    updateSkillList();
-  }, [updateSkillList]);
+    getSkills();
+  }, [getSkills]);
 
   const ActiveItem = () => {
     switch (active) {

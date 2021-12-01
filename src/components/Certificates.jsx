@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext, useCallback, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { StoreContext } from '../utils/store';
+import { useParams } from 'react-router';
 
 function Certificates() {
   const [active, setActive] = useState(0);
+  const { id } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [certificates, setCertificates] = useState([
     {
@@ -16,22 +19,85 @@ function Certificates() {
     },
   ]);
 
-  const [newCertificates, setNewCertificates] = useState([
-    {
-      id: 1,
-      name: 'Google',
-      issueDate: null,
-      validity: null,
-      issuer: 'Udemy',
-      link: 'google.com',
-    },
-  ]);
+  const { state, setState } = useContext(StoreContext);
 
   const [newName, setNewName] = useState('');
   const [newIssuer, setNewIssuer] = useState('');
   const [newValidity, setNewValidity] = useState();
   const [newIssueDate, setNewIssueDate] = useState(new Date());
   const [newLink, setNewLink] = useState('');
+
+  const getCertificates = useCallback(async () => {
+    try {
+      const skillids = await state.contract.methods.skills_of_user(id).call();
+      skillids.forEach(async (skid) => {
+        const cids = await state.contract.methods.cert_of_skill(skid).call();
+        cids.forEach(async (cid) => {
+          if (!certificates.some((certi) => certi.id === parseInt(cid))) {
+            const certi = await state.contract.certifications(cid).call();
+            setCertificates([
+              ...certificates,
+              {
+                id: parseInt(certi.id),
+                issueDate: certi.issue_date,
+                validity: certi.valid_till,
+                name: certi.name,
+                link: certi.url,
+                issuer: certi.issuer,
+              },
+            ]);
+          }
+        });
+      });
+    } catch (e) {
+      console.log('fetch error');
+      console.error(e);
+    }
+  }, [certificates, id, state.contract]);
+
+  const addCertificate = useCallback(async () => {
+    if (certificates.some((certi) => certi.name === newName)) {
+      alert('already exists');
+    } else {
+      try {
+        setNewName('');
+        setNewIssueDate('');
+        setNewValidity();
+        setNewIssuer('');
+        setNewLink('');
+        setShowModal(false);
+        const skillids = await state.contract.methods.skills_of_user(id).call();
+        if (skillids.length > 0) {
+          await state.contract.methods.add_certification(
+            state.accountId,
+            newLink,
+            newIssueDate,
+            newValidity,
+            newName,
+            newIssuer,
+            skillids[0]
+          );
+          getCertificates();
+        } else throw new Error('no skill to link to');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, [
+    certificates,
+    state,
+    getCertificates,
+    id,
+    newIssueDate,
+    newIssuer,
+    newLink,
+    newValidity,
+    newName,
+  ]);
+
+  useEffect(() => {
+    getCertificates();
+  }, [getCertificates]);
 
   const ActiveItem = () => {
     switch (active) {
@@ -55,36 +121,6 @@ function Certificates() {
         <h2>{certificates[i].link}</h2>
       </div>
     );
-  };
-
-  const certificateAdded = () => {
-    var flag = 0;
-    for (var i = 0; i < certificates.length; i++) {
-      if (certificates[i].link === newLink) {
-        alert('Already a certificate, Please add new certificate');
-        setNewCertificates(0);
-        flag = 1;
-      }
-    }
-    if (flag === 0) {
-      setCertificates((prevexp) => [
-        ...prevexp,
-        {
-          id: certificates.length + 1,
-          name: newName,
-          issueDate: newIssueDate,
-          validity: newValidity,
-          issuer: newIssuer,
-          link: newLink,
-        },
-      ]);
-      setNewName('');
-      setNewIssueDate('');
-      setNewValidity();
-      setNewIssuer('');
-      setNewLink('');
-      setShowModal(false);
-    }
   };
 
   return (
@@ -203,7 +239,7 @@ function Certificates() {
                     <button
                       className='bg-emerald-500 text-black active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                       type='button'
-                      onClick={certificateAdded}>
+                      onClick={addCertificate}>
                       Add
                     </button>
                   </div>

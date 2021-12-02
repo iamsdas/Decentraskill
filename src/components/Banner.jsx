@@ -8,7 +8,7 @@ function Banner() {
   const history = useHistory();
   const idRef = useRef('');
 
-  const [option, setOption] = useState('Company');
+  const [option, setOption] = useState('company');
 
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
@@ -58,7 +58,7 @@ function Banner() {
                     {({ active }) => (
                       <button
                         onClick={() => {
-                          setOption('User');
+                          setOption('user');
                         }}
                         className='w-full text-left'>
                         <a
@@ -80,7 +80,7 @@ function Banner() {
                       <button
                         type='submit'
                         onClick={() => {
-                          setOption('Company');
+                          setOption('company');
                         }}
                         className={classNames(
                           active
@@ -99,7 +99,7 @@ function Banner() {
           <button
             className='bg-gray-800 text-white rounded-full p-2 mx-1 hover:bg-gray-700 focus:outline-none w-10 h-10 flex items-center justify-center'
             onClick={() => {
-              history.push(`/user/${idRef.current.value}`);
+              history.push(`/${option}/${idRef.current.value}`);
             }}>
             <i className='material-icons'>search</i>
           </button>

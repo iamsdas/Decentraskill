@@ -2,14 +2,13 @@ import { useRef, useState, useContext, Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/solid';
 import { useHistory } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { StoreContext, signUp, connectToWallet } from '../utils';
 
 function Verify() {
   let history = useHistory();
   const ctx = useContext(StoreContext);
-  const { state } = ctx;
+  const { state, setState } = ctx;
   const emailRef = useRef('');
   const nameRef = useRef('');
 
@@ -23,7 +22,6 @@ function Verify() {
 
   return (
     <div>
-      <Navbar />
       <div className='flex h-screen flex-col justify-center items-center -mt-16'>
         <div className='w-3/12  p-5 border-2 drop-shadow-sm border-solid border-gray-100 rounded-3xl '>
           <div className='mx-auto text-center '>
@@ -113,9 +111,9 @@ function Verify() {
               </Menu>
               <button
                 onClick={async () => {
+                  setState({ ...state, loading: true });
                   if (state.connected) {
                     if (emailRef.current !== '') {
-                      const acc = accType ? 'user' : 'company';
                       if (
                         await signUp(
                           ctx,
@@ -132,6 +130,7 @@ function Verify() {
                   } else {
                     connectToWallet(ctx);
                   }
+                  setState((state) => ({ ...state, loading: false }));
                 }}
                 className='bg-gray-900 mx-auto text-white rounded-lg hover:text-white-300 block px-4 py-2 m-2 text-sm'>
                 Verify

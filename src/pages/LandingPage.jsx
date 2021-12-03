@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { StoreContext } from '../utils/store';
-import Navbar from '../components/Navbar';
 import Banner from '../components/Banner';
 import Footer from '../components/Footer';
 
@@ -40,7 +39,6 @@ const LandingPage = () => {
 
   return (
     <div className='bg-white h-full'>
-      <Navbar connected={0} />
       <Banner />
       <Footer />
     </div>

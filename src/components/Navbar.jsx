@@ -61,6 +61,7 @@ function Navbar() {
                     <button
                       className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium onhover:bg-gray-900 '
                       onClick={async () => {
+                        setState({ ...state, loading: true });
                         if (state.connected) {
                           const email =
                             localStorage.getItem('email') ??
@@ -69,6 +70,7 @@ function Navbar() {
                           const success = await login(ctx, email);
                           if (success) alert('welcome back');
                         } else connectToWallet(ctx);
+                        setState((state) => ({ ...state, loading: false }));
                       }}>
                       Login
                     </button>

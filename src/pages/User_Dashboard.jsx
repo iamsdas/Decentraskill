@@ -1,5 +1,4 @@
 import { useState, lazy } from 'react';
-import Navbar from '../components/Navbar';
 import Skills from '../components/Skills';
 import Experiance from '../components/Experiance';
 import Certificates from '../components/Certificates';
@@ -29,7 +28,6 @@ function User_Dashboard() {
 
   return (
     <div className='h-screen'>
-      <Navbar connected={1} />
       <header className='bg-white shadow'>
         <div className='max-w-9xl mx-auto py-6 px-4 sm:px-6 lg:px-8'>
           <h1 className='text-3xl font-bold text-gray-900'>

@@ -18,6 +18,7 @@ export interface IState {
   accountType: string;
   signedIn: boolean;
   connected: boolean;
+  loading: boolean;
   skills: any[];
 }
 
@@ -42,5 +43,6 @@ export const initialState: IState = {
   accountType: '',
   signedIn: false,
   connected: false,
+  loading: false,
   skills: [],
 };

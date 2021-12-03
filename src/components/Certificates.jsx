@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, useEffect } from 'react';
+import { useState, useContext, useCallback, useEffect, memo } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { StoreContext } from '../utils/store';
@@ -31,25 +31,25 @@ function Certificates() {
     try {
       const skillids = await state.contract.methods.skills_of_user(id).call();
       skillids.forEach(async (skid) => {
+        const promises = [];
         const cids = await state.contract.methods.cert_of_skill(skid).call();
         cids.forEach(async (cid) => {
-          if (!certificates.some((certi) => certi.id === parseInt(cid))) {
-            const certi = await state.contract.methods
-              .certifications(cid)
-              .call();
-            setCertificates([
-              ...certificates,
-              {
-                id: parseInt(certi.id),
-                issueDate: certi.issue_date,
-                validity: certi.valid_till,
-                name: certi.name,
-                link: certi.url,
-                issuer: certi.issuer,
-              },
-            ]);
-          }
+          if (!certificates.some((certi) => certi.id === parseInt(cid)))
+            promises.push(state.contract.methods.certifications(cid).call());
         });
+        if (promises.length > 0) {
+          const newCertifications = (await Promise.all(promises)).map(
+            (certi) => ({
+              id: parseInt(certi.id),
+              issueDate: certi.issue_date,
+              validity: certi.valid_till,
+              name: certi.name,
+              link: certi.url,
+              issuer: certi.issuer,
+            })
+          );
+          setCertificates([...certificates, ...newCertifications]);
+        }
       });
     } catch (e) {
       console.log('fetch error');
@@ -264,4 +264,4 @@ function Certificates() {
   );
 }
 
-export default Certificates;
+export default memo(Certificates);

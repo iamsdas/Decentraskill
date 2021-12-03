@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 function Profile() {
   const [showModal, setShowModal] = useState(false);
-  const { state } = useContext(StoreContext);
+  const { state, setState } = useContext(StoreContext);
   const { id } = useParams();
   const [name, setName] = useState('loading');
   const [role, setRole] = useState('Software Developer');
@@ -14,6 +14,7 @@ function Profile() {
 
   useEffect(() => {
     (async () => {
+      console.log('calling');
       try {
         const user = history.location.pathname.includes('company')
           ? await state.contract.methods.companies(id).call()
@@ -23,7 +24,7 @@ function Profile() {
         console.log(e);
       }
     })();
-  }, [id, state.contract, history.location]);
+  }, [id, state.contract, history.location, setState]);
 
   return (
     <div className='flex flex-row h-full w-full p-3 items-center justify-items-stretch text-gray-600'>
@@ -96,7 +97,7 @@ function Profile() {
                 {/*footer*/}
                 <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>
                   <button
-                    className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                    className='text-red-500 background-transparent font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                     type='button'
                     onClick={() => setShowModal(false)}>
                     Close

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback } from 'react';
+import { useState, useEffect, useContext, useCallback, memo } from 'react';
 import { useParams } from 'react-router';
 import { StoreContext } from '../utils';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -16,19 +16,19 @@ function Skills() {
 
   const getSkills = useCallback(async () => {
     const skillids = await state.contract.methods.skills_of_user(id).call();
+    const promises = [];
     skillids.forEach(async (skid) => {
-      if (!skills.some((skill) => skill.id === parseInt(skid))) {
-        const skill = await state.contract.methods.skills(skid).call();
-        setSkills([
-          ...skills,
-          {
-            id: parseInt(skill.id),
-            name: skill.name,
-            verified: skill.verified,
-          },
-        ]);
-      }
+      if (!skills.some((skill) => skill.id === parseInt(skid)))
+        promises.push(state.contract.methods.skills(skid).call());
     });
+    if (promises.length > 0) {
+      const newSkills = (await Promise.all(promises)).map((skill) => ({
+        id: parseInt(skill.id),
+        name: skill.name,
+        verified: skill.verified,
+      }));
+      setSkills((skills) => [...skills, ...newSkills]);
+    }
   }, [id, skills, state.contract]);
 
   const addSkill = useCallback(async () => {

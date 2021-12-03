@@ -4,7 +4,7 @@ import { StoreContext } from '../utils/store';
 
 function Requests() {
   const { id } = useParams();
-  const { state } = useContext(StoreContext);
+  const { state, setState } = useContext(StoreContext);
   const [reqs, setReq] = useState([]);
 
   const getRequests = useCallback(async () => {
@@ -28,6 +28,7 @@ function Requests() {
 
   const approveExp = useCallback(
     async (rid) => {
+      setState((state) => ({ ...state, loading: true }));
       try {
         await state.contract.methods
           .approve_experience(rid, id)
@@ -36,8 +37,9 @@ function Requests() {
         alert('error approving');
         console.error(e);
       }
+      setState((state) => ({ ...state, loading: false }));
     },
-    [state, id]
+    [state.contract, state.account, id, setState]
   );
 
   useEffect(() => {

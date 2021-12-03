@@ -3,7 +3,7 @@ import { StoreContext } from '../utils/store';
 import { useParams } from 'react-router';
 
 function Experiance() {
-  const { state } = useContext(StoreContext);
+  const { state, setState } = useContext(StoreContext);
   const [active, setActive] = useState(-1);
   const [showModal, setShowModal] = useState(false);
   const [newStartDate, setNewStartDate] = useState('');
@@ -36,6 +36,7 @@ function Experiance() {
   }, [id, exps, state.contract]);
 
   const addExp = useCallback(async () => {
+    setState((state) => ({ ...state, loading: true }));
     if (exps.some((exp) => exp.company_id === newCompanyID))
       alert('already exists');
     else {
@@ -59,7 +60,19 @@ function Experiance() {
         console.error(e);
       }
     }
-  }, [state, exps, getExps, newCompanyID, newRole, newEndDate, newStartDate]);
+    setState((state) => ({ ...state, loading: true }));
+  }, [
+    state.contract,
+    state.account,
+    state.accountId,
+    exps,
+    getExps,
+    newCompanyID,
+    newRole,
+    newEndDate,
+    newStartDate,
+    setState,
+  ]);
 
   useEffect(() => {
     getExps();
@@ -172,7 +185,7 @@ function Experiance() {
                   {/*footer*/}
                   <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>
                     <button
-                      className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                      className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                       type='button'
                       onClick={() => setShowModal(false)}>
                       Close

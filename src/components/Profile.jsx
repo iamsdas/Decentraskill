@@ -9,16 +9,23 @@ function Profile() {
   const { id } = useParams();
   const [name, setName] = useState('loading');
   const [role, setRole] = useState('Software Developer');
+  const [numEmp, setNumEmp] = useState(0);
   const [location, setLocation] = useState('India');
   const history = useHistory();
 
   useEffect(() => {
     (async () => {
-      console.log('calling');
       try {
-        const user = history.location.pathname.includes('company')
-          ? await state.contract.methods.companies(id).call()
-          : await state.contract.methods.employees(id).call();
+        let user;
+        if (history.location.pathname.includes('company')) {
+          user = await state.contract.methods.companies(id).call();
+          let res = 0;
+          res += (await state.contract.methods.curr_emp_of_company(id).call())
+            .length;
+          res += (await state.contract.methods.prev_emp_of_company(id).call())
+            .length;
+          setNumEmp(res);
+        } else user = await state.contract.methods.employees(id).call();
         setName(user.name);
       } catch (e) {
         console.log(e);
@@ -29,11 +36,16 @@ function Profile() {
   return (
     <div className='flex flex-row h-full w-full p-3 items-center justify-items-stretch text-gray-600'>
       <div className='w-4/6 h-full'>
-        <h1 className='text-xl text-black'>{name}</h1>
-        <div className='text-3xl '>{role}</div>
+        <h1 className='text-2xl text-black'>{name}</h1>
+        <div className='text-3xl'>
+          {history.location.pathname.includes('user') && role}
+        </div>
         <div>
           <h1>{location}</h1>
         </div>
+        {history.location.pathname.includes('company') && (
+          <div className='pt-5 text-lg'>{numEmp} Employees</div>
+        )}
       </div>
       <div className='w-2/6 h-full flex flex-row justify-end'>
         <div className='border-black w-36 h-36 border-solid rounded-full bg-gray-500'>

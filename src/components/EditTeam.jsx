@@ -3,7 +3,7 @@ import { StoreContext } from '../utils/store';
 import { useParams } from 'react-router';
 
 function EditTeam() {
-  const { state, setState } = useContext(StoreContext);
+  const { state } = useContext(StoreContext);
   const { id } = useParams();
   const [team, setTeam] = useState([
     {
@@ -19,7 +19,6 @@ function EditTeam() {
   ]);
 
   const getEmployees = useCallback(async () => {
-    setState((state) => ({ ...state, loading: true }));
     const eids = await state.contract.methods.curr_emp_of_company(id).call();
     eids.forEach(async (eid) => {
       if (!eids.some(async (emp) => emp.id === parseInt(eid))) {
@@ -35,8 +34,7 @@ function EditTeam() {
         ]);
       }
     });
-    setState((state) => ({ ...state, loading: false }));
-  }, [id, team, state.contract, setState]);
+  }, [id, team, state.contract]);
 
   useEffect(() => {
     getEmployees();

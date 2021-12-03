@@ -10,7 +10,7 @@ function Company_Dashboard() {
     { id: 2, name: 'Team' },
   ];
 
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(2);
 
   const ActiveItem = () => {
     switch (active) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useCallback, memo } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams } from 'react-router';
 import { StoreContext } from '../utils';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -52,14 +52,14 @@ function Skills() {
     getSkills();
   }, [getSkills]);
 
-  const ActiveItem = () => {
+  const ActiveItem = useCallback(() => {
     switch (active) {
       case -1:
         return <h1>No option selcted</h1>;
       default:
         return <Comment skid={active} />;
     }
-  };
+  }, [active]);
 
   function check(value) {
     console.log('Captcha value: ' + value);
@@ -202,7 +202,7 @@ function Skills() {
                   {/*footer*/}
                   <div className='flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b'>
                     <button
-                      className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                      className='text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
                       type='button'
                       onClick={() => setShowModal(false)}>
                       Close

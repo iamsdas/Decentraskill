@@ -23,12 +23,19 @@ const Comment = ({ skid }) => {
               await state.contract.methods.employees(comment.endorser_id).call()
             ).name,
             date: comment.date,
+            skid: skid,
             content: comment.comment,
           },
         ]);
       }
     });
   }, [comments, skid, state.contract]);
+
+  useEffect(() => {
+    setComments((comments) =>
+      comments.filter((comment) => comment.skid === skid)
+    );
+  }, [skid]);
 
   const addComment = useCallback(async () => {
     const date = new Date();

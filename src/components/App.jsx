@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { StoreContext, initialState } from '../utils';
 import Load from './Load';
 import Layout from './Layout';
+import '../styles/App.css';
 
 const Verify = lazy(() => import('../pages/Verify'));
 const LandingPage = lazy(() => import('../pages/LandingPage'));

@@ -1,6 +1,8 @@
-import { useState, lazy } from 'react';
+import { useState, lazy, useEffect, useContext } from 'react';
+import { StoreContext } from '../utils/store';
 import Requests from '../components/Requests';
 import EditTeam from '../components/EditTeam';
+import '../styles/App.css';
 
 const Profile = lazy(() => import('../components/Profile'));
 
@@ -9,13 +11,25 @@ function Company_Dashboard() {
     { id: 1, name: 'Requests' },
     { id: 2, name: 'Team' },
   ];
+  const { state, setState } = useContext(StoreContext);
+  const [style, setStyle] = useState('');
 
   const [active, setActive] = useState(2);
+
+  useEffect(() => {
+    if (!state.connected) {
+      setStyle('authenticated');
+    }
+  }, [state.contract, setState]);
 
   const ActiveItem = () => {
     switch (active) {
       case 1:
-        return <Requests />;
+        return (
+          <div className={style}>
+            <Requests />
+          </div>
+        );
       case 2:
         return <EditTeam />;
       default:
@@ -35,18 +49,27 @@ function Company_Dashboard() {
 
       <div className='flex mx-auto py-6 sm:px-6 lg:px-8 h-4/5'>
         <sidebar className=' w-1/4 bg-gray-800 mx-auto sm:px-6 lg:px-8  float-left text-gray-300'>
-          {items.map((item, i) => {
-            return (
-              <div
-                key={i}
-                className={`m-2 p-2 text-xl hover:bg-gray-300 hover:text-gray-800 w-full`}
-                onClick={(i) => {
-                  setActive(item.id);
-                }}>
-                {item.name}
-              </div>
-            );
-          })}
+          {state.connected ? (
+            <>
+              {items.map((item, i) => {
+                return (
+                  <div
+                    key={i}
+                    className={`m-2 p-2 text-xl hover:bg-gray-300 hover:text-gray-800 w-full`}
+                    onClick={(i) => {
+                      setActive(item.id);
+                    }}>
+                    {item.name}
+                  </div>
+                );
+              })}
+            </>
+          ) : (
+            <div
+              className={`m-2 p-2 text-xl hover:bg-gray-300 hover:text-gray-800 w-full`}>
+              Team
+            </div>
+          )}
         </sidebar>
         <main className='w-3/4 lg:px-8 sm:px-6 mx-auto inline-block float-right h-full '>
           <div className='border-4 border-solid border-gray-200 rounded-lg h-2/6 mx-5 mt-0 mb-1'>

@@ -13,7 +13,12 @@ function Profile() {
   const [location, setLocation] = useState('India');
   const history = useHistory();
 
+  const [style, setStyle] = useState('');
+
   useEffect(() => {
+    if (!state.connected) {
+      setStyle('authenticated');
+    }
     (async () => {
       try {
         let user;
@@ -53,9 +58,11 @@ function Profile() {
             <i className='fas fa-user'></i>
           </div>
         </div>
-        <div>
+        <div className={style}>
           <button
-            className='bg-red-800 inline text-white active:bg-red-800 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+            className={
+              'bg-red-800 inline text-white active:bg-red-800 font-bold uppercase text-sm px-4 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+            }
             type='button'
             onClick={() => setShowModal(true)}>
             <i class='fas fa-edit'></i>

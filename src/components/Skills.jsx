@@ -13,6 +13,7 @@ function Skills() {
   const { state } = useContext(StoreContext);
   const [active, setActive] = useState(-1);
   const [skills, setSkills] = useState([]);
+  const [style, setStyle] = useState('');
 
   const getSkills = useCallback(async () => {
     const skillids = await state.contract.methods.skills_of_user(id).call();
@@ -49,6 +50,9 @@ function Skills() {
   }, [state, skills, newSkill, getSkills]);
 
   useEffect(() => {
+    if (!state.connected) {
+      setStyle('authenticated');
+    }
     getSkills();
   }, [getSkills]);
 
@@ -158,13 +162,14 @@ function Skills() {
             </div>
           );
         })}
-
-        <button
-          className='bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm mx-6 px-8 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-          type='button'
-          onClick={() => setShowModal(true)}>
-          Add Skill
-        </button>
+        <div className={style}>
+          <button
+            className='bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm mx-6 px-8 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+            type='button'
+            onClick={() => setShowModal(true)}>
+            Add Skill
+          </button>
+        </div>
         {showModal ? (
           <div>
             {' '}

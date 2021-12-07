@@ -11,6 +11,7 @@ function Experiance() {
   const [newRole, setNewRole] = useState('');
   const [newCompanyID, setNewCompanyID] = useState('');
   const { id } = useParams();
+  const [style, setStyle] = useState('');
 
   const [exps, setExps] = useState([]);
 
@@ -75,6 +76,9 @@ function Experiance() {
   ]);
 
   useEffect(() => {
+    if (!state.connected) {
+      setStyle('authenticated');
+    }
     getExps();
   }, [getExps]);
 
@@ -115,12 +119,14 @@ function Experiance() {
             </div>
           );
         })}
-        <button
-          className='bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
-          type='button'
-          onClick={() => setShowModal(true)}>
-          Add Experiance
-        </button>
+        <div className={style}>
+          <button
+            className='bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+            type='button'
+            onClick={() => setShowModal(true)}>
+            Add Experiance
+          </button>
+        </div>
         {showModal ? (
           <div>
             {' '}

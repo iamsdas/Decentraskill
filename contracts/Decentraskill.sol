@@ -45,6 +45,7 @@ contract Decentraskill {
     struct experience {
         string starting_date;
         string ending_date;
+        string user_name;
         string role;
         bool currently_working;
         uint256 company_id;
@@ -215,6 +216,7 @@ contract Decentraskill {
         new_experience.starting_date = starting_date;
         new_experience.ending_date = ending_date;
         new_experience.role = role;
+        new_experience.user_name = employees[user_id].name;
         employees[user_id].user_work_experience.push(experiences.length - 1);
         companies[company_id].requested_employees.push(experiences.length - 1);
     }

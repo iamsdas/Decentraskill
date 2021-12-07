@@ -17,6 +17,7 @@ function EditTeam() {
       role: 'SDE-1',
     },
   ]);
+  const [style, setStyle] = useState('');
 
   const getEmployees = useCallback(async () => {
     const eids = await state.contract.methods.curr_emp_of_company(id).call();
@@ -37,6 +38,9 @@ function EditTeam() {
   }, [id, team, state.contract]);
 
   useEffect(() => {
+    if (!state.connected) {
+      setStyle('authenticated');
+    }
     getEmployees();
   }, [getEmployees]);
 
@@ -55,9 +59,11 @@ function EditTeam() {
                   Date.
                 </p>
               </div>
-              <div>
+              <div className={style}>
                 <button
-                  className='bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                  className={
+                    'bg-red-800 text-white active:bg-red-800 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150'
+                  }
                   type='button'>
                   Remove
                 </button>

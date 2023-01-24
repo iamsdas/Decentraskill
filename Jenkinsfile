@@ -1,12 +1,14 @@
 pipeline {
-    agent { dockerfile {
-        filename 'Dockerfile'
-        args '-u root:root'
-    } }
+    agent { dockerfile true }
     environment {
-        HOME = "/app"
+        HOME = '/var/lib/jenkins/workspace/demo'
     }
     stages {
+        stage('Dependencies') {
+            steps {
+                sh 'yarn install --frozen-lockfile'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'yarn craco build'
@@ -14,7 +16,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
+                sh 'yarn truffle test'
             }
         }
     }

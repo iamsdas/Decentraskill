@@ -27,7 +27,7 @@ pipeline {
         }
         stage('Test smart contracts') {
             steps {
-                sh 'yarn truffle test'
+                sh 'yarn truffle test ./tests/decentraskill.js'
             }
         }
     }

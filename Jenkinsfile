@@ -1,7 +1,8 @@
 pipeline {
     agent { dockerfile true }
     environment {
-        HOME = '/var/lib/jenkins/workspace/demo'
+        HOME = '/var/lib/jenkins/workspace/decentraskill'
+        YARN_CACHE_FOLDER = '/var/lib/jenkins/workspace/decentraskill/.yarn-cache'
     }
     stages {
         stage('Dependencies') {

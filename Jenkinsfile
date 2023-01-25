@@ -10,14 +10,23 @@ pipeline {
                 sh 'yarn install --frozen-lockfile'
             }
         }
-        stage('Build') {
+        stage('Compile smart contracts') {
+            steps {
+                sh 'yarn truffle compile'
+            }
+        }
+        stage('Build frontend') {
             steps {
                 sh 'yarn build'
             }
         }
-        stage('Test') {
+        stage('Setup local blockchain') {
             steps {
                 sh 'ganache-cli -D'
+            }
+        }
+        stage('Test smart contracts') {
+            steps {
                 sh 'yarn truffle test'
             }
         }

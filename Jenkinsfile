@@ -12,11 +12,12 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'yarn craco build'
+                sh 'yarn build'
             }
         }
         stage('Test') {
             steps {
+                sh 'ganache-cli -D'
                 sh 'yarn truffle test'
             }
         }

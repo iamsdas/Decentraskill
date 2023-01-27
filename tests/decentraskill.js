@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const Decentraskill = artifacts.require('Decentraskill');
 
 contract('Decentraskill', (accounts) => {

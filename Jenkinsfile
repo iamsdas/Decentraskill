@@ -19,6 +19,7 @@ pipeline {
         }
         stage('Build frontend') {
             steps {
+                sh 'rm -rf build'
                 sh 'yarn build'
             }
         }
@@ -32,9 +33,17 @@ pipeline {
                 sh 'yarn truffle test ./tests/decentraskill.js'
             }
         }
-        stage('Deploy react output') {
+        stage('Deploy build') {
             steps {
-                sh 'echo ${ACCESS_TOKEN} ${USERNAME}'
+                dir('build') {
+                    sh 'git init .'
+                    sh 'git checkout -b gh-pages'
+                    sh 'git add .'
+                    sh 'git config user.email "jenkins@decentraskill.com"'
+                    sh 'git config user.name "Jenkins Bot"'
+                    sh 'git commit -m "update build"'
+                    sh 'git push --force https://${USERNAME}:${ACCESS_TOKEN}@github.com/iamsdas/decentraskill.git gh-pages'
+                }
             }
         }
     }

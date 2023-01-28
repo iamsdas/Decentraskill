@@ -14,11 +14,12 @@ function Requests() {
     reqids.forEach(async (rid) => {
       if (!reqs.some(async (req) => req.id === parseInt(rid))) {
         const req = await state.contract.methods.experiences(rid).call();
+        console.log(JSON.stringify(req));
         setReq([
           ...reqs,
           {
             id: parseInt(rid),
-            // name: (await state.contract.methods.companies(rid).call()).name,
+            name: req.user_name,
             role: req.role,
           },
         ]);
@@ -58,8 +59,7 @@ function Requests() {
                 <div>
                   <p>
                     <h1 className='font-medium text-lg text-blue-700 inline'>
-                      {/* {item.name} */}
-                      Person
+                      {item.name}
                     </h1>{' '}
                     has requested to join the team as {item.role} in your
                     Oragnization.

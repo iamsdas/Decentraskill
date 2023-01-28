@@ -3,6 +3,8 @@ pipeline {
     environment {
         HOME = '/var/lib/jenkins/workspace/decentraskill'
         YARN_CACHE_FOLDER = '/var/lib/jenkins/workspace/decentraskill/.yarn-cache'
+        ACCESS_TOKEN = credentials('access-token')
+        USERNAME = credentials('username')
     }
     stages {
         stage('Dependencies') {
@@ -28,6 +30,11 @@ pipeline {
         stage('Test smart contracts') {
             steps {
                 sh 'yarn truffle test ./tests/decentraskill.js'
+            }
+        }
+        stage('Deploy react output') {
+            steps {
+                sh 'echo ${ACCESS_TOKEN} ${USERNAME}'
             }
         }
     }
